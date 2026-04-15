@@ -1,12 +1,26 @@
 const { defineConfig } = require('cypress')
-//const grep = require('@cypress/grep/src/plugin')
+// const grep = require('@cypress/grep/src/plugin')
 
 module.exports = defineConfig({
+
+  projectId: "doark9",
+
+  video: true,
+  screenshotOnRunFailure: true,
+
+  retries: {
+    runMode: 2,
+    openMode: 0
+  },
+
+  defaultCommandTimeout: 8000,
+  requestTimeout: 10000,
+
   e2e: {
     baseUrl: 'https://hackernews-seven.vercel.app',
 
     setupNodeEvents(on, config) {
-      //grep(config)
+      // grep(config)
 
       config.env = {
         ...config.env,
@@ -15,16 +29,6 @@ module.exports = defineConfig({
       }
 
       return config
-    },
-
-    retries: {
-      runMode: 2,
-      openMode: 0
-    },
-
-    defaultCommandTimeout: 8000,
-    requestTimeout: 10000,
-
-    projectId: "doark9"
+    }
   }
 })
