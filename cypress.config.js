@@ -23,6 +23,8 @@ module.exports = defineConfig({
     },
 
     defaultCommandTimeout: 8000,
-    requestTimeout: 10000
+    requestTimeout: 10000,
+
+    projectId: "doark9"
   }
 })
