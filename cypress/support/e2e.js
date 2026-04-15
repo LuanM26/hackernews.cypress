@@ -1,5 +1,6 @@
 import '@cypress/grep'
 import 'cypress-iframe'
+import './commands'
 
 // comando customizado
 Cypress.Commands.add('getByData', (selector) => {

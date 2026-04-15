@@ -1,0 +1,8 @@
+{
+  "hits": [
+    { "title": "React" },
+    { "title": "Angular" },
+    { "title": "Vue" },
+    { "title": "Svelte" }
+  ]
+}
