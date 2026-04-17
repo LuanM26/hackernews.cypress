@@ -1,14 +1,38 @@
-import { globSync } from "glob";
 import fs from "fs";
+import path from "path";
 
-export function readProject() {
-    const files = globSync("cypress/**/*.cy.{js,ts}");
+type TestFile = {
+    path: string;
+    content: string;
+};
 
-    return files.map((file) => ({
-        path: file,
-        content: fs.readFileSync(file, "utf-8"),
-    }));
+function getAllFiles(dir: string): string[] {
+    const entries = fs.readdirSync(dir);
+
+    return entries.flatMap((entry) => {
+        const fullPath = path.join(dir, entry);
+        const stat = fs.statSync(fullPath);
+
+        if (stat.isDirectory()) {
+            return getAllFiles(fullPath); // 🔥 recursivo
+        }
+
+        return fullPath;
+    });
 }
 
-// 👇 TESTE
-console.log(readProject());
+export function readProject(): TestFile[] {
+    const basePath = path.resolve("cypress/e2e");
+
+    const allFiles = getAllFiles(basePath);
+
+    return allFiles
+        .filter(
+            (file) =>
+                file.endsWith(".cy.ts") || file.endsWith(".cy.js")
+        )
+        .map((file) => ({
+            path: file,
+            content: fs.readFileSync(file, "utf-8"),
+        }));
+}

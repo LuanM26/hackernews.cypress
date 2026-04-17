@@ -1,212 +1,129 @@
-# 🤖 AI QA Agent
 
 <p align="center">
-
-![Cypress](https://img.shields.io/badge/Cypress-Tests-brightgreen?style=for-the-badge&logo=cypress)
-![CI](https://img.shields.io/badge/CI-GitHub%20Actions-blue?style=for-the-badge&logo=githubactions)
-![AI](https://img.shields.io/badge/AI-QA%20Agent-black?style=for-the-badge)
-
+  <img src="https://img.shields.io/badge/Cypress-Tests-brightgreen?style=for-the-badge&logo=cypress" />
+  <img src="https://img.shields.io/badge/CI-GitHub%20Actions-blue?style=for-the-badge&logo=githubactions" />
+  <img src="https://img.shields.io/badge/AI-QA%20Agent-black?style=for-the-badge" />
 </p>
 
----
+# 🚀 Cypress AI Automation Project
 
-## 🚀 About
-<!-- AUTO-GENERATED:ABOUT -->
-
-Projeto de automação com agente inteligente que:
-
-- Gera testes automaticamente
-- Analisa cobertura real
-- Avalia qualidade
-- Atualiza documentação
-
-<!-- END -->
+Projeto de automação com Cypress evoluído para um **Agente Inteligente de QA**, capaz de gerar, analisar e corrigir testes automaticamente.
 
 ---
 
-## ⚙️ DevOps
-<!-- AUTO-GENERATED:DEVOPS -->
+## ⚙️ Stack
 
-✅ CI/CD detectado
-
-❌ Cypress Cloud não detectado
-
-<!-- END -->
-
----
-
-## 🌐 APIs
-<!-- AUTO-GENERATED:APIS -->
-- GET https://hn.algolia.com/api/v1/search?query=redux&page=0&hitsPerPage=100
-- GET https://hn.algolia.com/api/v1/search?query=redux&page=1&hitsPerPage=100
-- GET https://hn.algolia.com/api/v1/search?query=redux&page=2&hitsPerPage=100
-<!-- END -->
+- Cypress
+- TypeScript
+- Node.js
+- Faker
+- GitHub Actions
+- Cypress Cloud
 
 ---
 
-## 📊 Coverage
-<!-- AUTO-GENERATED:COVERAGE -->
 
-- Total: 3
-- Covered: 3
-- Coverage: 100%
+## 📦 Dependências
 
-<!-- END -->
+### 🔹 Produção
 
----
+| Pacote | Versão | Descrição |
+|--------|--------|----------|
+| @cypress/grep | ^6.0.0 | Dependência do projeto |
+| @eslint/js | ^10.0.1 | Dependência do projeto |
+| @faker-js/faker | ^10.4.0 | Geração de dados fake para testes |
+| cypress | ^15.13.1 | Framework de testes end-to-end |
+| cypress-iframe | ^1.0.1 | Dependência do projeto |
+| cypress-mailosaur | ^5.0.0 | Dependência do projeto |
+| eslint | ^10.2.0 | Análise e padronização de código |
+| eslint-plugin-cypress | ^6.3.0 | Dependência do projeto |
+| fs-extra | ^11.3.4 | Dependência do projeto |
+| glob | ^13.0.6 | Dependência do projeto |
+| globals | ^17.5.0 | Dependência do projeto |
 
-## 🧠 Quality
-<!-- AUTO-GENERATED:QUALITY -->
+### 🔹 Desenvolvimento
 
-### cypress\e2e\tests\pagina.cy.js
-- Status: ✅
-- Error: ✅
-- Pagination: ❌
-- Schema: ✅
+| Pacote | Versão | Descrição |
+|--------|--------|----------|
+| @types/mocha | ^10.0.10 | Dependência do projeto |
+| @types/node | ^25.6.0 | Dependência do projeto |
+| ts-node | ^10.9.2 | Execução de TypeScript no Node.js |
+| typescript | ^6.0.2 | Superset do JavaScript com tipagem |
 
-
-### cypress\e2e\tests\auto-generated-e2e.cy.ts
-- Status: ✅
-- Error: ❌
-- Pagination: ❌
-- Schema: ❌
-
-
-### cypress\e2e\api\auto-generated.cy.ts
-- Status: ❌
-- Error: ❌
-- Pagination: ✅
-- Schema: ✅
-
-<!-- END -->
 
 ---
+
 
 ## 🤖 AI Agent Scripts
-<!-- AUTO-GENERATED:SCRIPTS -->
 
-### 🧠 Core
-- **index.ts** → Orquestra o agente
+| Script | Descrição |
+|--------|----------|
+| analyze-failures | Analisa falhas dos testes para aprendizado do agente |
+| analyze-test-quality | Avalia qualidade dos testes |
+| compare-coverage | Compara APIs reais com testes |
+| coverage-analyzer | Calcula cobertura de endpoints |
+| deduplicate-flows | Remove duplicação de fluxos de UI |
+| detect-devops | Detecta integração CI/CD |
+| detect-errors | Identifica erros recorrentes |
+| endpoint-validator | Valida endpoints reais |
+| extract-ui-flow | Extrai fluxo de interação do usuário |
+| filter-runtime | Filtra requisições reais capturadas |
+| flow-intelligence | Aplica inteligência aos fluxos |
+| flow-utils | Utilidades de manipulação de fluxo |
+| generate-e2e | Gera testes E2E automaticamente |
+| generate-readme | Gera este README automaticamente |
+| generate-report | Gera relatório final de qualidade |
+| generate-tests | Gera novos testes automaticamente |
+| index | Orquestrador principal do agente |
+| read-project | Lê estrutura de testes do projeto |
+| selector-utils | Corrige seletores automaticamente |
+| self-heal | Aplica auto-correção de testes |
 
-### 📊 Análise
-- **coverage-analyzer.ts** → Extrai endpoints
-- **filter-runtime.ts** → APIs reais
-- **compare-coverage.ts** → Coverage real
-- **analyze-test-quality.ts** → Qualidade
 
-### 🤖 Geração
-- **generate-tests.ts** → API tests
-- **generate-e2e.ts** → E2E inteligente
+---
 
-### 📄 Docs
-- **generate-readme.ts** → Atualiza README
+## 🧠 Capacidades do Agente
 
-<!-- END -->
- 
+- ✔ Geração automática de testes E2E
+- ✔ Captura de APIs reais
+- ✔ Análise de cobertura
+- ✔ Análise de qualidade
+- ✔ Extração de fluxo de UI
+- ✔ Deduplicação inteligente
+- ✔ Self-healing
+- ✔ Geração automática de README
 
+---
 
-<!-- AUTO-GENERATED:STRUCTURE -->
+## 📊 Integrações
+
+- ✔ CI/CD com GitHub Actions
+- ✔ Cypress Cloud integrado
+
+---
+
+## 🚀 Execução
+
+### Rodar testes
 
 ```bash
-scripts/
-  ai-agent/
-    index.ts
-    read-project.ts
-    coverage-analyzer.ts
-    filter-runtime.ts
-    compare-coverage.ts
-    analyze-test-quality.ts
-    extract-ui-flow.ts
-    generate-tests.ts
-    generate-e2e.ts
-    generate-readme.ts
-
-cypress/
-  e2e/
-    tests/
-    api/
+npx cypress run
 ```
 
-<!-- END -->
----
+### Rodar agente
 
-<!-- AUTO-GENERATED:DEPENDENCIES -->
-
-### 📦 Production
-- **@cypress/grep (6.0.0)**
-  → Biblioteca do projeto
-  → https://www.npmjs.com/package/@cypress/grep
-
-- **@eslint/js (10.0.1)**
-  → Biblioteca do projeto
-  → https://www.npmjs.com/package/@eslint/js
-
-- **@faker-js/faker (10.4.0)**
-  → Biblioteca do projeto
-  → https://www.npmjs.com/package/@faker-js/faker
-
-- **cypress (15.13.1)**
-  → Framework de testes end-to-end
-  → https://www.npmjs.com/package/cypress
-
-- **cypress-iframe (1.0.1)**
-  → Biblioteca do projeto
-  → https://www.npmjs.com/package/cypress-iframe
-
-- **cypress-mailosaur (5.0.0)**
-  → Biblioteca do projeto
-  → https://www.npmjs.com/package/cypress-mailosaur
-
-- **eslint (10.2.0)**
-  → Linting
-  → https://www.npmjs.com/package/eslint
-
-- **eslint-plugin-cypress (6.3.0)**
-  → Biblioteca do projeto
-  → https://www.npmjs.com/package/eslint-plugin-cypress
-
-- **fs-extra (11.3.4)**
-  → Biblioteca do projeto
-  → https://www.npmjs.com/package/fs-extra
-
-- **glob (13.0.6)**
-  → Biblioteca do projeto
-  → https://www.npmjs.com/package/glob
-
-- **globals (17.5.0)**
-  → Biblioteca do projeto
-  → https://www.npmjs.com/package/globals
+```bash
+npx ts-node scripts/ai-agent/index.ts
+```
 
 ---
 
-### 🛠 Dev
-- **@types/mocha (10.0.10)**
-  → Biblioteca do projeto
-  → https://www.npmjs.com/package/@types/mocha
-
-- **@types/node (25.6.0)**
-  → Biblioteca do projeto
-  → https://www.npmjs.com/package/@types/node
-
-- **ts-node (10.9.2)**
-  → Execução TS no Node
-  → https://www.npmjs.com/package/ts-node
-
-- **typescript (6.0.2)**
-  → Tipagem estática
-  → https://www.npmjs.com/package/typescript
-
-<!-- END -->
-## 👨‍💻 Author
-<!-- AUTO-GENERATED:AUTHOR -->
+## 👨‍💻 Responsável
 
 **Luan Macedo de Jesus Santos Araujo**
 
-QA Engineer | Automation | Cypress | AI Agent
+---
 
-- GitHub: https://github.com/LuanM26
-- LinkedIn: www.linkedin.com/in/luan-macedo-a18136152
+## 🧠 Visão
 
-<!-- END -->
-
-<!-- END -->
+Evolução da automação tradicional para um modelo de QA inteligente baseado em dados, comportamento e auto-aprendizado.

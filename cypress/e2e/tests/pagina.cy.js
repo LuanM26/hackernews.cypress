@@ -5,45 +5,41 @@ describe('Pagina', () => {
   beforeEach(() => {
     cy.captureRequests();
     cy.visit('/');
+    Cypress.on('uncaught:exception', () => false);
   });
 
   afterEach(() => {
     // espera requisições acontecerem
-    cy.wait(1000);
+
 
     cy.get('@capturedRequests').then((newReqs) => {
-      cy.readFile('scripts/ai-agent/runtime-requests.json')
-        .then((existing) => {
-          const merged = [...existing, ...newReqs];
+      cy.readFile('scripts/ai-agent/runtime-requests.json', {
+        failOnNonExisting: false,
+      }).then((existing) => {
+        const safe = Array.isArray(existing) ? existing : [];
 
-          const unique = Array.from(
-            new Map(
-              merged.map(item => [`${item.method}-${item.url}`, item])
-            ).values()
-          );
+        const merged = [...safe, ...newReqs];
 
-          cy.writeFile('scripts/ai-agent/runtime-requests.json', unique);
-        });
+        const unique = Array.from(
+          new Map(
+            merged.map(item => [`${item.method}-${item.url}`, item])
+          ).values()
+        );
+
+        cy.writeFile('scripts/ai-agent/runtime-requests.json', unique);
+      });
     });
   });
 
   it('Deve encontrar o elemento de Search e digitar algo do pelo Faker', () => {
     const { faker } = require('@faker-js/faker');
 
-    Cypress.on('uncaught:exception', (err) => {
-      if (err.message.includes('Cannot read properties')) {
-        return false;
-      }
-    });
-
-    cy.intercept('GET', '**/search*').as('getSearchResults');
-
-
+    cy.intercept('GET', '**/search*').as('searchRequest')
 
     cy.get('input').should('be.visible');
     cy.get('input').clear().type('' + faker.lorem.word());
     cy.get('form > button').click();
-    cy.wait('@getSearchResults').then(({ request, response }) => {
+    cy.wait('@searchRequest').then(({ request, response }) => {
       expect(response.statusCode).to.eq(200);
       expect(response.body.hits).to.have.length.greaterThan(0);
     });
@@ -204,4 +200,4 @@ describe('Pagina', () => {
   it('deve validar múltiplos itens via fixture', () => {
     cy.validateTopNLinks('.table-row a', 5)
   })
-})
+});

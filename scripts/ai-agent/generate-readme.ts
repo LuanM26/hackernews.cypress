@@ -1,248 +1,202 @@
 import fs from "fs";
 import path from "path";
-import { compareCoverage } from "./compare-coverage";
-import { analyzeTestQuality } from "./analyze-test-quality";
-import { getApiRequests } from "./filter-runtime";
-import { detectDevOps } from "./detect-devops";
-
-// ================= TYPES =================
-
-type ApiRequest = {
-    method: string;
-    url: string;
-};
-
-type Coverage = {
-    endpoint: string;
-    method: string;
-    covered: boolean;
-};
-
-type TestQuality = {
-    file: string;
-    hasStatusCheck: boolean;
-    hasErrorTest: boolean;
-    hasPagination: boolean;
-    hasSchemaValidation: boolean;
-};
-
-// ================= HELPERS =================
-
-function replaceSection(content: string, section: string, newData: string) {
-    const start = `<!-- AUTO-GENERATED:${section} -->`;
-    const end = `<!-- END -->`;
-
-    if (!content.includes(start)) {
-        return content + `\n\n${start}\n${newData}\n${end}\n`;
-    }
-
-    const regex = new RegExp(`${start}[\\s\\S]*?${end}`, "g");
-
-    return content.replace(regex, `${start}\n${newData}\n${end}`);
-}
-
-// ================= STRUCTURE =================
-
-function generateProjectStructure() {
-    return `
-\`\`\`bash
-scripts/
-  ai-agent/
-    index.ts
-    read-project.ts
-    coverage-analyzer.ts
-    filter-runtime.ts
-    compare-coverage.ts
-    analyze-test-quality.ts
-    extract-ui-flow.ts
-    generate-tests.ts
-    generate-e2e.ts
-    generate-readme.ts
-
-cypress/
-  e2e/
-    tests/
-    api/
-\`\`\`
-`;
-}
 
 // ================= SCRIPTS =================
 
-function generateScriptsDescription() {
+function getAgentScripts() {
+    const dir = path.resolve("scripts/ai-agent");
+
+    if (!fs.existsSync(dir)) return [];
+
+    return fs
+        .readdirSync(dir)
+        .filter((file) => file.endsWith(".ts"))
+        .map((file) => file.replace(".ts", ""))
+        .sort();
+}
+
+function describeScript(name: string) {
+    const map: Record<string, string> = {
+        "analyze-failures": "Analisa falhas dos testes para aprendizado do agente",
+        "analyze-test-quality": "Avalia qualidade dos testes",
+        "compare-coverage": "Compara APIs reais com testes",
+        "coverage-analyzer": "Calcula cobertura de endpoints",
+        "deduplicate-flows": "Remove duplicação de fluxos de UI",
+        "detect-devops": "Detecta integração CI/CD",
+        "detect-errors": "Identifica erros recorrentes",
+        "endpoint-validator": "Valida endpoints reais",
+        "extract-ui-flow": "Extrai fluxo de interação do usuário",
+        "filter-runtime": "Filtra requisições reais capturadas",
+        "flow-intelligence": "Aplica inteligência aos fluxos",
+        "flow-utils": "Utilidades de manipulação de fluxo",
+        "generate-e2e": "Gera testes E2E automaticamente",
+        "generate-readme": "Gera este README automaticamente",
+        "generate-report": "Gera relatório final de qualidade",
+        "generate-tests": "Gera novos testes automaticamente",
+        "index": "Orquestrador principal do agente",
+        "read-project": "Lê estrutura de testes do projeto",
+        "selector-utils": "Corrige seletores automaticamente",
+        "self-heal": "Aplica auto-correção de testes",
+    };
+
+    return map[name] || "Script do agente";
+}
+
+function generateScriptsSection() {
+    const scripts = getAgentScripts();
+
+    if (!scripts.length) return "";
+
     return `
-### 🧠 Core
-- **index.ts** → Orquestra o agente
+## 🤖 AI Agent Scripts
 
-### 📊 Análise
-- **coverage-analyzer.ts** → Extrai endpoints
-- **filter-runtime.ts** → APIs reais
-- **compare-coverage.ts** → Coverage real
-- **analyze-test-quality.ts** → Qualidade
-
-### 🤖 Geração
-- **generate-tests.ts** → API tests
-- **generate-e2e.ts** → E2E inteligente
-
-### 📄 Docs
-- **generate-readme.ts** → Atualiza README
+| Script | Descrição |
+|--------|----------|
+${scripts.map(s => `| ${s} | ${describeScript(s)} |`).join("\n")}
 `;
 }
 
-// ================= DEPENDENCIES =================
+// ================= DEPENDÊNCIAS =================
 
 function getDependencies() {
-    const pkgPath = path.resolve(process.cwd(), "package.json");
+    const packagePath = path.resolve("package.json");
 
-    if (!fs.existsSync(pkgPath)) {
-        return { dependencies: {}, devDependencies: {} };
-    }
+    if (!fs.existsSync(packagePath)) return { deps: [], devDeps: [], raw: {} };
 
-    const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf-8"));
+    const pkg = JSON.parse(fs.readFileSync(packagePath, "utf-8"));
 
     return {
-        dependencies: pkg.dependencies || {},
-        devDependencies: pkg.devDependencies || {},
+        deps: Object.keys(pkg.dependencies || {}),
+        devDeps: Object.keys(pkg.devDependencies || {}),
+        raw: pkg,
     };
 }
 
-const libDescriptions: Record<string, string> = {
-    cypress: "Framework de testes end-to-end",
-    typescript: "Tipagem estática",
-    axios: "Cliente HTTP",
-    dotenv: "Variáveis de ambiente",
-    eslint: "Linting",
-    prettier: "Formatação",
-    "ts-node": "Execução TS no Node",
-};
+function describeDependency(name: string) {
+    const map: Record<string, string> = {
+        cypress: "Framework de testes end-to-end",
+        typescript: "Superset do JavaScript com tipagem",
+        "ts-node": "Execução de TypeScript no Node.js",
+        "@faker-js/faker": "Geração de dados fake para testes",
+        eslint: "Análise e padronização de código",
+        prettier: "Formatação automática de código",
+    };
+
+    return map[name] || "Dependência do projeto";
+}
 
 function generateDependenciesSection() {
-    const { dependencies, devDependencies } = getDependencies();
+    const { deps, devDeps, raw } = getDependencies();
 
-    const format = (deps: Record<string, string>) => {
-        const entries = Object.entries(deps);
-
-        if (!entries.length) return "_Nenhuma dependência_";
-
-        return entries
-            .map(([name, version]) => {
-                const v = version.replace(/[\^~]/g, "");
-                const desc = libDescriptions[name] || "Biblioteca do projeto";
-
-                return `- **${name} (${v})**
-  → ${desc}
-  → https://www.npmjs.com/package/${name}`;
-            })
-            .join("\n\n");
-    };
+    if (!deps.length && !devDeps.length) return "";
 
     return `
-### 📦 Production
-${format(dependencies)}
+## 📦 Dependências
 
----
+### 🔹 Produção
 
-### 🛠 Dev
-${format(devDependencies)}
-`;
-}
-const authorSection = generateAuthorSection();
-function generateAuthorSection() {
-    const name = "Luan Macedo de Jesus Santos Araujo";
-    const role = "QA Engineer | Automation | Cypress | AI Agent";
-    const github = "https://github.com/LuanM26";
-    const linkedin = "www.linkedin.com/in/luan-macedo-a18136152";
+| Pacote | Versão | Descrição |
+|--------|--------|----------|
+${deps
+            .map(d => `| ${d} | ${raw.dependencies[d]} | ${describeDependency(d)} |`)
+            .join("\n")}
 
-    return `
-**${name}**
+### 🔹 Desenvolvimento
 
-${role}
-
-- GitHub: ${github}
-- LinkedIn: ${linkedin}
+| Pacote | Versão | Descrição |
+|--------|--------|----------|
+${devDeps
+            .map(d => `| ${d} | ${raw.devDependencies[d]} | ${describeDependency(d)} |`)
+            .join("\n")}
 `;
 }
 
 // ================= MAIN =================
 
 export function generateReadme() {
-    const coverage: Coverage[] = compareCoverage();
-    const quality: TestQuality[] = analyzeTestQuality();
-    const apis: ApiRequest[] = getApiRequests();
+    const scriptsSection = generateScriptsSection();
+    const dependenciesSection = generateDependenciesSection();
 
-    const { hasCI, hasCloud } = detectDevOps();
+    const content = `
+<p align="center">
+  <img src="https://img.shields.io/badge/Cypress-Tests-brightgreen?style=for-the-badge&logo=cypress" />
+  <img src="https://img.shields.io/badge/CI-GitHub%20Actions-blue?style=for-the-badge&logo=githubactions" />
+  <img src="https://img.shields.io/badge/AI-QA%20Agent-black?style=for-the-badge" />
+</p>
 
-    const readmePath = path.resolve(process.cwd(), "README.md");
+# 🚀 Cypress AI Automation Project
 
-    if (!fs.existsSync(readmePath)) {
-        fs.writeFileSync(readmePath, "# 🤖 AI QA Agent\n");
-    }
+Projeto de automação com Cypress evoluído para um **Agente Inteligente de QA**, capaz de gerar, analisar e corrigir testes automaticamente.
 
-    let content = fs.readFileSync(readmePath, "utf-8");
+---
 
-    if (!content || content.length < 10) {
-        content = "# 🤖 AI QA Agent\n";
-    }
+## ⚙️ Stack
 
-    // ================= SECTIONS =================
+- Cypress
+- TypeScript
+- Node.js
+- Faker
+- GitHub Actions
+- Cypress Cloud
 
-    const about = `
-Projeto de automação com agente inteligente que:
+---
 
-- Gera testes automaticamente
-- Analisa cobertura real
-- Avalia qualidade
-- Atualiza documentação
+${dependenciesSection}
+
+---
+
+${scriptsSection}
+
+---
+
+## 🧠 Capacidades do Agente
+
+- ✔ Geração automática de testes E2E
+- ✔ Captura de APIs reais
+- ✔ Análise de cobertura
+- ✔ Análise de qualidade
+- ✔ Extração de fluxo de UI
+- ✔ Deduplicação inteligente
+- ✔ Self-healing
+- ✔ Geração automática de README
+
+---
+
+## 📊 Integrações
+
+- ✔ CI/CD com GitHub Actions
+- ✔ Cypress Cloud integrado
+
+---
+
+## 🚀 Execução
+
+### Rodar testes
+
+\`\`\`bash
+npx cypress run
+\`\`\`
+
+### Rodar agente
+
+\`\`\`bash
+npx ts-node scripts/ai-agent/index.ts
+\`\`\`
+
+---
+
+## 👨‍💻 Responsável
+
+**Luan Macedo de Jesus Santos Araujo**
+
+---
+
+## 🧠 Visão
+
+Evolução da automação tradicional para um modelo de QA inteligente baseado em dados, comportamento e auto-aprendizado.
 `;
 
-    const devops = `
-${hasCI ? "✅ CI/CD detectado" : "❌ CI/CD não detectado"}
+    fs.writeFileSync("README.md", content);
 
-${hasCloud ? "☁️ Cypress Cloud ativo" : "❌ Cypress Cloud não detectado"}
-`;
-
-    const apisSection =
-        apis.length > 0
-            ? apis.map(a => `- ${a.method} ${a.url}`).join("\n")
-            : "_Sem APIs_";
-
-    const total = coverage.length;
-    const covered = coverage.filter(c => c.covered).length;
-    const percent = total ? Math.round((covered / total) * 100) : 0;
-
-    const coverageSection = `
-- Total: ${total}
-- Covered: ${covered}
-- Coverage: ${percent}%
-`;
-
-    const qualitySection = quality
-        .map(q => `
-### ${q.file}
-- Status: ${q.hasStatusCheck ? "✅" : "❌"}
-- Error: ${q.hasErrorTest ? "✅" : "❌"}
-- Pagination: ${q.hasPagination ? "✅" : "❌"}
-- Schema: ${q.hasSchemaValidation ? "✅" : "❌"}
-`)
-        .join("\n");
-
-    const structure = generateProjectStructure();
-    const scripts = generateScriptsDescription();
-    const deps = generateDependenciesSection();
-
-    // ================= APPLY =================
-
-    content = replaceSection(content, "ABOUT", about);
-    content = replaceSection(content, "DEVOPS", devops);
-    content = replaceSection(content, "APIS", apisSection);
-    content = replaceSection(content, "COVERAGE", coverageSection);
-    content = replaceSection(content, "QUALITY", qualitySection);
-    content = replaceSection(content, "STRUCTURE", structure);
-    content = replaceSection(content, "SCRIPTS", scripts);
-    content = replaceSection(content, "DEPENDENCIES", deps);
-    content = replaceSection(content, "AUTHOR", authorSection);
-
-    fs.writeFileSync(readmePath, content);
-
-    console.log("📄 README atualizado (versão final completa)");
+    console.log("📄 README atualizado com scripts e dependências");
 }

@@ -6,6 +6,7 @@ import { generateReport } from "./generate-report";
 import { extractUIFlows } from "./extract-ui-flow";
 import { generateE2ETests } from "./generate-e2e";
 import { generateReadme } from "./generate-readme";
+import { selfHealTests } from "./self-heal";
 
 
 console.log("🌐 APIS REAIS:");
@@ -22,13 +23,21 @@ console.log(compareCoverage());
 console.log("\n🧠 QUALIDADE DOS TESTES:");
 console.log(analyzeTestQuality());
 
-console.log("\n📊 RELATÓRIO FINAL:");
-console.log(generateReport());
+const coverage = compareCoverage();
+const quality = analyzeTestQuality();
+
+const report = generateReport(coverage, quality);
+
+console.log("📊 RELATÓRIO FINAL:");
+console.log(report);
 
 console.log("\n🖥️ UI FLOWS:");
 console.log(extractUIFlows());
 
 console.log("\n🤖 GERANDO E2E...");
 generateE2ETests();
+
+console.log("🤖 Aplicando correções automáticas...");
+selfHealTests();
 
 generateReadme();

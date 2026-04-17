@@ -1,16 +1,47 @@
-import { compareCoverage } from "./compare-coverage";
-import { analyzeTestQuality } from "./analyze-test-quality";
+type ReportItem = {
+    endpoint: string;
+    method: string;
+    covered: boolean;
+    quality?: any;
+};
 
-export function generateReport() {
-    const coverage = compareCoverage();
-    const quality = analyzeTestQuality();
+export function generateReport(
+    coverage: ReportItem[],
+    quality: any[]
+): ReportItem[] {
 
-    return coverage.map((c) => {
+    // ================= MERGE =================
+
+    const report = coverage.map((item) => {
+        const match = quality.sort((a, b) => {
+            const score = (q: any) =>
+                Number(q.hasStatusCheck) +
+                Number(q.hasErrorTest) +
+                Number(q.hasPagination) +
+                Number(q.hasSchemaValidation);
+
+            return score(b) - score(a);
+        })[0];
+
+
         return {
-            endpoint: c.endpoint,
-            method: c.method,
-            covered: c.covered,
-            quality: quality[0], // simplificado por enquanto
+            endpoint: item.endpoint,
+            method: item.method,
+            covered: item.covered,
+            quality: match,
         };
     });
+
+    // ================= DEDUPLICAÇÃO =================
+
+    const unique = Array.from(
+        new Map(
+            report.map((item) => [
+                `${item.method}-${item.endpoint}`,
+                item,
+            ])
+        ).values()
+    );
+
+    return unique;
 }

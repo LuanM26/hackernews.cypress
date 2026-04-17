@@ -1,89 +1,65 @@
 import fs from "fs";
-import { extractUIFlows } from "./extract-ui-flow";
+import path from "path";
+import { compareCoverage } from "./compare-coverage";
+import { isValidEndpoint } from "./endpoint-validator";
+import { getApiRequests } from "./filter-runtime";
 
-export function generateE2ETests() {
-  const flows = extractUIFlows();
+// ================= TYPES =================
 
-  const validFlows = flows.filter(f => f.actions && f.actions.length > 0);
+type Coverage = {
+  endpoint: string;
+  method: string;
+  covered: boolean;
+};
 
-  let content = `
-describe('E2E Auto Generated', () => {
+// ================= MAIN =================
 
-  beforeEach(() => {
-    cy.visit('/');
-  });
-`;
+export function generateTests() {
+  const coverage: Coverage[] = compareCoverage();
+  const realApis = getApiRequests();
 
-  validFlows.forEach((flow, index) => {
-    content += `
-  it('auto flow ${index + 1} - ${flow.file}', () => {
-`;
 
-    let hasAnyStep = false;
+  let content = `describe('API Auto Generated', () => {\n\n`;
 
-    flow.actions.forEach((action: string) => {
+  coverage.forEach((item) => {
+    const endpoint = item.endpoint;
+    const method = item.method;
 
-      // 👉 VISIT
-      if (action.startsWith("visit")) {
-        const url = action.replace("visit ", "").trim();
-        content += `    cy.visit(${url});\n`;
-        hasAnyStep = true;
-      }
+    // 🔥 valida se endpoint realmente existe
+    const isValid = isValidEndpoint(endpoint, method, realApis);
 
-      // 👉 GET
-      if (action.startsWith("get")) {
-        let selector = action.replace("get ", "").trim();
-
-        // ❌ ignora alias (@algo)
-        if (selector.includes("@")) return;
-
-        // limpa aspas
-        selector = selector.replace(/^['"]|['"]$/g, "");
-
-        // corrige nth-child quebrado
-        if (selector.includes(":nth-child(") && !selector.includes(")")) {
-          selector = selector + ")";
-        }
-
-        // evita selector inválido vazio
-        if (!selector || selector.length < 2) return;
-
-        content += `    cy.get('${selector}').should('be.visible');\n`;
-        hasAnyStep = true;
-      }
-
-      // 👉 TYPE (básico)
-      if (action === "type") {
-        content += `    cy.get('input').type('test');\n`;
-        hasAnyStep = true;
-      }
-
-      // 👉 CLICK (básico)
-      if (action === "click") {
-        content += `    cy.get('button').click();\n`;
-        hasAnyStep = true;
-      }
-
-    });
-
-    // 🔥 fallback: nunca deixa vazio
-    if (!hasAnyStep) {
-      content += `    cy.log('No valid actions detected');\n`;
+    if (!isValid) {
+      console.log(`⚠️ Ignorando endpoint inválido: ${method} ${endpoint}`);
+      return;
     }
 
-    content += `
-  });
-`;
+    content += `  it('${method} ${endpoint}', () => {\n`;
+
+    // ================= REQUEST =================
+
+    content += `    cy.request({\n`;
+    content += `      method: '${method}',\n`;
+    content += `      url: '${endpoint}',\n`;
+    content += `      failOnStatusCode: false\n`;
+    content += `    }).then((response) => {\n`;
+
+    // ================= ASSERT =================
+
+    content += `      expect(response.status).to.be.oneOf([200, 201, 204, 304]);\n`;
+
+    content += `    });\n`;
+    content += `  });\n\n`;
   });
 
-  content += `
-});
-`;
+  content += `});`;
 
-  fs.writeFileSync(
-    "cypress/e2e/tests/auto-generated-e2e.cy.ts",
-    content
+  // ================= SAVE =================
+
+  const filePath = path.resolve(
+    "cypress/e2e/api/auto-generated.cy.ts"
   );
 
-  console.log("\n✅ E2E TEST GENERATED SUCCESSFULLY\n");
+  fs.writeFileSync(filePath, content);
+
+  console.log("🤖 Testes de API gerados com validação real");
 }

@@ -1,112 +1,131 @@
 import fs from "fs";
 import path from "path";
 import { extractUIFlows } from "./extract-ui-flow";
-import { detectErrors } from "./detect-errors";
+import { fixSelector, enhanceSelector } from "./selector-utils";
+
+// ================= DEDUP =================
+
+function deduplicateFlows(flows: any[]) {
+    const seen = new Set<string>();
+
+    return flows.filter((flow) => {
+        const key = flow.actions
+            .map((a: string) => a.trim().toLowerCase())
+            .join("|");
+
+        if (seen.has(key)) return false;
+
+        seen.add(key);
+        return true;
+    });
+}
+
+// ================= PARSE =================
+
+function parseSelector(action: string): string {
+    const raw = action.replace("get ", "").trim();
+    return raw.replace(/['"]/g, "");
+}
+
+// ================= INTENT =================
+
+function detectIntent(actions: string[]): string {
+    if (actions.includes("type") && actions.includes("click")) return "search";
+    if (actions.some((a) => a.includes("page"))) return "pagination";
+    return "generic";
+}
+
+// ================= MAIN =================
 
 export function generateE2ETests() {
     const flows = extractUIFlows();
+    const validFlows = deduplicateFlows(flows);
 
-    const validFlows = flows.filter(f => f.actions && f.actions.length > 0);
+    let content = `import { faker } from '@faker-js/faker';\n\n`;
 
-    let content = `
-describe('E2E Auto Generated (Intelligent)', () => {
-
-  beforeEach(() => {
-    cy.visit('/');
-  });
-`;
-
-    validFlows.forEach((flow, index) => {
-        content += `
-  it('intelligent flow ${index + 1}', () => {
-    ${detectErrors()}
-
-    Cypress.on('uncaught:exception', () => false);
-
-    cy.intercept('GET', '**/search*').as('search');
-`;
-
-        let hasInput = false;
-        let hasButton = false;
-        let hasList = false;
-
-        flow.actions.forEach((action: string) => {
-
-            if (action.startsWith("get")) {
-                let selector = action.replace("get ", "").trim();
-
-                if (selector.includes("@")) return;
-
-                selector = selector.replace(/^['"]|['"]$/g, "");
-
-                if (selector.includes(":nth-child(") && !selector.includes(")")) {
-                    selector = selector + ")";
-                }
-
-                // 🧠 INPUT DETECTADO
-                if (selector === "input" && !hasInput) {
-                    content += `
-    cy.get('${selector}')
-      .should('be.visible')
-      .type('redux');
-`;
-                    hasInput = true;
-                }
-
-                // 🧠 BUTTON DETECTADO
-                else if (selector.includes("button") && !hasButton) {
-                    content += `
-    cy.get('${selector}')
-      .should('be.visible')
-      .click();
-`;
-                    hasButton = true;
-                }
-
-                // 🧠 LIST DETECTADA
-                else if (selector.includes("table-row") && !hasList) {
-                    content += `
-    cy.get('${selector}')
-      .should('have.length.greaterThan', 0);
-`;
-                    hasList = true;
-                }
-
-                // 🧠 LINK
-                else if (selector.includes("a")) {
-                    content += `
-    cy.get('${selector}')
-      .should('exist');
-`;
-                }
-            }
-
-        });
-
-        // 🧠 VALIDAÇÃO DE API
-        content += `
-    cy.wait('@search')
-      .its('response.statusCode')
-      .should('eq', 200);
-`;
-
-        content += `
-  });
-`;
-    });
+    content += `describe('E2E Auto Generated (AI Level 5)', () => {\n\n`;
 
     content += `
-});
+  before(() => {
+    Cypress.on('uncaught:exception', () => false);
+  });\n\n`;
+
+    validFlows.forEach((flow, index) => {
+        if (!flow.actions || flow.actions.length === 0) return;
+
+        let lastSelector = "";
+        const intent = detectIntent(flow.actions);
+
+        // ================= POSITIVE TEST =================
+
+        content += `  it('should perform ${intent} successfully', () => {\n`;
+
+        content += `    cy.intercept('GET', '**/search*').as('apiCall');\n`;
+
+        flow.actions.forEach((action: string) => {
+            if (action.startsWith("visit")) {
+                const url = action.replace("visit ", "").replace(/['"]/g, "");
+                content += `    cy.visit('${url}');\n`;
+            }
+
+            if (action.startsWith("get")) {
+                const selector = parseSelector(action);
+                const safeSelector = enhanceSelector(fixSelector(selector));
+
+                lastSelector = safeSelector;
+
+                content += `    cy.get('${safeSelector}').should('be.visible');\n`;
+            }
+
+            if (action === "type" && lastSelector) {
+                content += `    cy.get('${lastSelector}').clear().type(faker.lorem.word());\n`;
+            }
+
+            if (action === "click" && lastSelector) {
+                content += `    cy.get('${lastSelector}').click({ force: true });\n`;
+            }
+        });
+
+        // 🔥 valida API automaticamente
+        content += `
+    cy.wait('@apiCall').then(({ response }) => {
+      expect(response.statusCode).to.eq(200);
+      expect(response.body).to.have.property('hits');
+    });
+    `;
+
+        content += `  });\n\n`;
+
+        // ================= NEGATIVE TEST =================
+
+        if (intent === "search") {
+            content += `  it('should handle ${intent} error', () => {\n`;
+
+            content += `
+    cy.intercept('GET', '**/search*', {
+      forceNetworkError: true
+    });
+
+    cy.visit('/');
+
+    cy.get('input').type('test{enter}');
+
+    cy.contains('Something went wrong').should('be.visible');
 `;
 
+            content += `  });\n\n`;
+        }
+    });
+
+    content += `});`;
+
+    // ================= SAVE =================
+
     const filePath = path.resolve(
-        process.cwd(),
         "cypress/e2e/tests/auto-generated-e2e.cy.ts"
     );
 
-    console.log("📁 Writing intelligent E2E to:", filePath);
-
     fs.writeFileSync(filePath, content);
 
-    console.log("\n🔥 INTELLIGENT E2E GENERATED\n");
+    console.log("🤖 E2E nível 5 (produção real) gerado com sucesso");
 }
