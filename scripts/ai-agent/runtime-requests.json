@@ -1,0 +1,54 @@
+[
+  {
+    "method": "GET",
+    "url": "https://hackernews-seven.vercel.app/"
+  },
+  {
+    "method": "GET",
+    "url": "https://hackernews-seven.vercel.app/static/css/main.dd8135da.css"
+  },
+  {
+    "method": "GET",
+    "url": "https://hackernews-seven.vercel.app/static/js/main.0ca0035f.js"
+  },
+  {
+    "method": "GET",
+    "url": "https://hn.algolia.com/api/v1/search?query=redux&page=0&hitsPerPage=100"
+  },
+  {
+    "method": "GET",
+    "url": "https://hackernews-seven.vercel.app/service-worker.js"
+  },
+  {
+    "method": "GET",
+    "url": "https://hackernews-seven.vercel.app/?"
+  },
+  {
+    "method": "GET",
+    "url": "https://hn.algolia.com/api/v1/search?query=redux&page=1&hitsPerPage=100"
+  },
+  {
+    "method": "GET",
+    "url": "https://hn.algolia.com/api/v1/search?query=redux&page=2&hitsPerPage=100"
+  },
+  {
+    "method": "POST",
+    "url": "https://android.clients.google.com/c2dm/register3"
+  },
+  {
+    "method": "GET",
+    "url": "https://hackernews-seven.vercel.app/__/fonts/FiraCode-VF.woff2"
+  },
+  {
+    "method": "GET",
+    "url": "https://content-autofill.googleapis.com/v1/pages/ChRDaHJvbWUvMTQ3LjAuNzcyNy41NxIZCb2mJenqNpBYEgUNkWGVTiEstlVjlnOhOg==?alt=proto"
+  },
+  {
+    "method": "GET",
+    "url": "https://content-autofill.googleapis.com/v1/pages/ChRDaHJvbWUvMTQ3LjAuNzcyNy41NxInCYYOOcZXUPIkEgUNN5ze0xIFDZFhlU4SBQ2RYZVOIRc3HX-MWcUrEiAJWwdRvt0l78sSBQ03nN7TEgUNkWGVTiEXNx1_jFnFKxIZCb2mJenqNpBYEgUNkWGVTiEXNx1_jFnFKw==?alt=proto"
+  },
+  {
+    "method": "GET",
+    "url": "https://safebrowsing.googleapis.com/v4/threatListUpdates:fetch?$req=Ch0KDGdvb2dsZWNocm9tZRINMTQ3LjAuNzcyNy41NxopCAUQARobCg0IBRAGGAEiAzAwMTABEIK1HxoCGAX5Kn4lIgQgASACKAEaKAgQEAEaGgoNCBAQBhgBIgMwMDEwARD3PxoCGAVSCzUuIgQgASACKAEaKQgBEAEaGwoNCAEQBhgBIgMwMDEwARCp2RQaAhgFNTLPlyIEIAEgAigBGikIAxABGhsKDQgDEAYYASIDMDAxMAEQ9NIUGgIYBT76INQiBCABIAIoARopCA4QARobCg0IDhAGGAEiAzAwMTABEM2ECBoCGAVd3MfLIgQgASACKAEaKQgHEAEaGwoNCAcQBhgBIgMwMDEwARC2wRQaAhgFXjZCjiIEIAEgAigBGigIARAIGhoKDQgBEAgYASIDMDAxMAQQnEAaAhgFJL6hByIEIAEgAigEGikIDxABGhsKDQgPEAYYASIDMDAxMAEQvZEJGgIYBS4KA6siBCABIAIoARonCAkQARoZCg0ICRAGGAEiAzAwMTABECQaAhgF6_B7aSIEIAEgAigBGigICBABGhoKDQgIEAYYASIDMDAxMAEQjhwaAhgFdVSaLyIEIAEgAigBGikIDRABGhsKDQgNEAYYASIDMDAxMAEQresCGgIYBRjWQMciBCABIAIoASICCAE=&$ct=application/x-protobuf&key=AIzaSyA2KlwBX3mkFo30om9LUFYQhpqLoa_BNhE"
+  }
+]

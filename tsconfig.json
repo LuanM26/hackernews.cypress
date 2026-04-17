@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "ignoreDeprecations": "6.0",
+    "esModuleInterop": true,
+    "strict": true,
+    "types": [
+      "cypress",
+      "node",
+      "mocha"
+    ],
+    "target": "ES2017"
+  }
+}

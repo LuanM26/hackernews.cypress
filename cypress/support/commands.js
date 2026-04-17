@@ -21,3 +21,15 @@ Cypress.Commands.add('validateTopNLinks', (selector, limit = 5) => {
         })
 
 })
+Cypress.Commands.add('captureRequests', () => {
+    const requests = [];
+
+    cy.intercept('**', (req) => {
+        requests.push({
+            method: req.method,
+            url: req.url,
+        });
+    }).as('allRequests');
+
+    cy.wrap(requests).as('capturedRequests');
+});
