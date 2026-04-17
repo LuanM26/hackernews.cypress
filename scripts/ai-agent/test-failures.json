@@ -58,5 +58,10 @@
     "title": "should improve GET /api/v1/search",
     "error": "expected '<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1,shrink-to-fit=no\"><meta name=\"theme-color\" content=\"#000000\"><link rel=\"manifest\" href=\"/manifest.json\"><link rel=\"shortcut icon\" href=\"/favicon.ico\"><title>React App</title><script defer=\"defer\" src=\"/static/js/main.0ca0035f.js\"></script><link href=\"/static/css/main.dd8135da.css\" rel=\"stylesheet\"></head><body><noscript>You need to enable JavaScript to run this app.</noscript><div id=\"root\" role=\"main\"></div></body></html>' to have property 'hits'",
     "file": "auto-generated.cy.ts"
+  },
+  {
+    "title": "should improve GET /api/v1/search",
+    "error": "expected '<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1,shrink-to-fit=no\"><meta name=\"theme-color\" content=\"#000000\"><link rel=\"manifest\" href=\"/manifest.json\"><link rel=\"shortcut icon\" href=\"/favicon.ico\"><title>React App</title><script defer=\"defer\" src=\"/static/js/main.0ca0035f.js\"></script><link href=\"/static/css/main.dd8135da.css\" rel=\"stylesheet\"></head><body><noscript>You need to enable JavaScript to run this app.</noscript><div id=\"root\" role=\"main\"></div></body></html>' to have property 'hits'",
+    "file": "auto-generated.cy.ts"
   }
 ]

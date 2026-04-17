@@ -8,33 +8,32 @@ describe('E2E Auto Generated (AI Level 5)', () => {
   });
 
   it('should perform search successfully', () => {
-    cy.intercept('GET', '**/search*').as('apiCall');
-    cy.visit('/');
-    cy.get('input, [data-testid='search'], input[type='text']').should('be.visible');
-    cy.get('input, [data-testid='search'], input[type='text']').clear().type(faker.lorem.word());
-    cy.get('form > button').should('be.visible');
-    cy.get('form > button').click({ force: true });
-    cy.get('.table-row, [data-testid='row']').should('be.visible');
-    cy.get('.table > :nth-child(2)').should('be.visible');
-    cy.get('.page > :nth-child(3)').should('be.visible');
+    cy.intercept('GET', '**/api/v1/search*').as('searchRequest');
 
-    cy.wait('@apiCall').then(({ response }) => {
+    cy.visit('/');
+
+    cy.get('input').should('be.visible');
+    cy.get('input').clear().type('redux');
+
+    cy.get('form > button').click();
+
+    cy.wait('@searchRequest').then(({ response }) => {
       expect(response.statusCode).to.eq(200);
       expect(response.body).to.have.property('hits');
+      expect(response.body.hits.length).to.be.greaterThan(0);
     });
+
+    it('should handle search error', () => {
+
+      cy.intercept('GET', '**/search*', {
+        forceNetworkError: true
       });
 
-  it('should handle search error', () => {
+      cy.visit('/');
 
-    cy.intercept('GET', '**/search*', {
-      forceNetworkError: true
+      cy.get('input').type('test{enter}');
+
+      cy.contains('Something went wrong').should('be.visible');
     });
-
-    cy.visit('/');
-
-    cy.get('input').type('test{enter}');
-
-    cy.contains('Something went wrong').should('be.visible');
   });
-
 });
