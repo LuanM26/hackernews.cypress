@@ -62,19 +62,19 @@ it('should validate pagination consistency', () => {
 
 });
 
-  it('should validate success response', () => {
+it('should validate success response', () => {
 
-    cy.request({
-      method: 'GET',
-      url: 'https://hn.algolia.com/api/v1/search?query=redux&page=0&hitsPerPage=100',
-      failOnStatusCode: false
-    }).then((response) => {
+  cy.request({
+    method: 'GET',
+    url: 'https://hn.algolia.com/api/v1/search?query=redux&page=0&hitsPerPage=100',
+    failOnStatusCode: false
+  }).then((response) => {
 
-      expect(response.status).to.eq(200);
-      expect(response.body).to.exist;
-      expect(response.body).to.have.property('hits');
-      expect(response.body.hits).to.be.an('array');
-
-    });
+    expect(response.status).to.eq(200);
+    expect(response.body).to.exist;
+    expect(response.body).to.have.property('hits');
+    expect(response.body.hits).to.be.an('array');
 
   });
+
+});
