@@ -154,6 +154,6 @@ describe('API Auto Generated (Smart)', () => {
     fs.appendFileSync(filePath, content);
     console.log("🤖 API tests gerados com qualidade alta");
   } else {
-    console.log("🧠 Nenhum teste de API novo necessário");
+    console.log("🧠 Nenhum E2E novo necessário");
   }
 }
