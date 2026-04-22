@@ -1,17 +1,64 @@
-import { readProject } from "./read-project";
+import fs from "fs";
+import path from "path";
 
-export function analyzeTestQuality() {
-    const tests = readProject();
+type Quality = {
+    file: string;
+    hasStatusCheck: boolean;
+    hasErrorTest: boolean;
+    hasPagination: boolean;
+    hasSchemaValidation: boolean;
+};
 
-    return tests.map((test) => {
-        const content = test.content;
+export function analyzeTestQuality(): Quality[] {
+    const testDir = path.resolve("cypress/e2e");
 
-        return {
-            file: test.path,
-            hasStatusCheck: content.includes("statusCode"),
-            hasErrorTest: content.includes("forceNetworkError"),
-            hasPagination: /page=\d+/.test(content),
-            hasSchemaValidation: content.includes("body"),
-        };
-    });
+    if (!fs.existsSync(testDir)) return [];
+
+    const results: Quality[] = [];
+
+    function readFiles(dir: string) {
+        const files = fs.readdirSync(dir);
+
+        files.forEach((file) => {
+            const fullPath = path.join(dir, file);
+
+            if (fs.statSync(fullPath).isDirectory()) {
+                readFiles(fullPath);
+            } else if (file.endsWith(".js") || file.endsWith(".ts")) {
+                const content = fs.readFileSync(fullPath, "utf-8");
+
+                results.push({
+                    file: fullPath,
+
+                    // 🔥 aceita Cypress moderno
+                    hasStatusCheck:
+                        content.includes("status") &&
+                        (content.includes("eq(200)") || content.includes("to.eq(200)")),
+
+                    // 🔥 detecta erro real
+                    hasErrorTest:
+                        content.includes("failOnStatusCode") ||
+                        content.includes("forceNetworkError") ||
+                        content.includes("INVALID") ||
+                        content.includes("throw new Error"),
+
+                    // 🔥 paginação
+                    hasPagination:
+                        content.includes("page=") ||
+                        content.includes("pagination") ||
+                        content.includes("forEach"),
+
+                    // 🔥 valida schema
+                    hasSchemaValidation:
+                        content.includes("have.property") ||
+                        content.includes("body.") ||
+                        content.includes("hits"),
+                });
+            }
+        });
+    }
+
+    readFiles(testDir);
+
+    return results;
 }

@@ -17,26 +17,27 @@ function getAgentScripts() {
 
 function describeScript(name: string) {
     const map: Record<string, string> = {
-        "analyze-failures": "Analisa falhas dos testes para aprendizado do agente",
+        "analyze-failures": "Analisa falhas dos testes",
         "analyze-test-quality": "Avalia qualidade dos testes",
         "compare-coverage": "Compara APIs reais com testes",
         "coverage-analyzer": "Calcula cobertura de endpoints",
-        "deduplicate-flows": "Remove duplicação de fluxos de UI",
-        "detect-devops": "Detecta integração CI/CD",
+        "deduplicate-flows": "Remove duplicação de fluxos",
+        "detect-devops": "Detecta CI/CD",
         "detect-errors": "Identifica erros recorrentes",
-        "endpoint-validator": "Valida endpoints reais",
-        "extract-ui-flow": "Extrai fluxo de interação do usuário",
-        "filter-runtime": "Filtra requisições reais capturadas",
-        "flow-intelligence": "Aplica inteligência aos fluxos",
-        "flow-utils": "Utilidades de manipulação de fluxo",
-        "generate-e2e": "Gera testes E2E automaticamente",
-        "generate-readme": "Gera este README automaticamente",
-        "generate-report": "Gera relatório final de qualidade",
-        "generate-tests": "Gera novos testes automaticamente",
-        "index": "Orquestrador principal do agente",
-        "read-project": "Lê estrutura de testes do projeto",
-        "selector-utils": "Corrige seletores automaticamente",
-        "self-heal": "Aplica auto-correção de testes",
+        "endpoint-validator": "Valida endpoints",
+        "extract-ui-flow": "Extrai fluxo de UI",
+        "filter-runtime": "Filtra requisições reais",
+        "flow-intelligence": "Aplica inteligência ao fluxo",
+        "flow-utils": "Utilidades de fluxo",
+        "generate-e2e": "Gera testes E2E",
+        "generate-readme": "Gera README automaticamente",
+        "generate-report": "Gera relatório de qualidade",
+        "generate-tests": "Gera testes de API",
+        "index": "Orquestrador do agente",
+        "read-project": "Lê estrutura do projeto",
+        "selector-utils": "Corrige seletores",
+        "self-heal": "Auto-correção de testes",
+        "qa-score": "Calcula QA Score",
     };
 
     return map[name] || "Script do agente";
@@ -74,15 +75,15 @@ function getDependencies() {
 
 function describeDependency(name: string) {
     const map: Record<string, string> = {
-        cypress: "Framework de testes end-to-end",
-        typescript: "Superset do JavaScript com tipagem",
-        "ts-node": "Execução de TypeScript no Node.js",
-        "@faker-js/faker": "Geração de dados fake para testes",
-        eslint: "Análise e padronização de código",
-        prettier: "Formatação automática de código",
+        cypress: "Framework de testes E2E",
+        typescript: "Tipagem estática",
+        "ts-node": "Execução TS no Node",
+        "@faker-js/faker": "Dados fake",
+        eslint: "Linting",
+        prettier: "Formatação",
     };
 
-    return map[name] || "Dependência do projeto";
+    return map[name] || "Dependência";
 }
 
 function generateDependenciesSection() {
@@ -97,36 +98,70 @@ function generateDependenciesSection() {
 
 | Pacote | Versão | Descrição |
 |--------|--------|----------|
-${deps
-            .map(d => `| ${d} | ${raw.dependencies[d]} | ${describeDependency(d)} |`)
-            .join("\n")}
+${deps.map(d => `| ${d} | ${raw.dependencies[d]} | ${describeDependency(d)} |`).join("\n")}
 
 ### 🔹 Desenvolvimento
 
 | Pacote | Versão | Descrição |
 |--------|--------|----------|
-${devDeps
-            .map(d => `| ${d} | ${raw.devDependencies[d]} | ${describeDependency(d)} |`)
-            .join("\n")}
+${devDeps.map(d => `| ${d} | ${raw.devDependencies[d]} | ${describeDependency(d)} |`).join("\n")}
 `;
 }
 
 // ================= MAIN =================
 
-export function generateReadme() {
+type CoverageItem = {
+    endpoint: string;
+    method: string;
+    covered: boolean;
+};
+
+type QualityItem = {
+    file: string;
+    hasStatusCheck: boolean;
+    hasErrorTest: boolean;
+    hasPagination: boolean;
+    hasSchemaValidation: boolean;
+};
+
+type Score = {
+    coverageScore: number;
+    apiQualityScore: number;
+    e2eQualityScore: number;
+    finalScore: number;
+};
+
+export function generateReadme(
+    coverage: CoverageItem[],
+    quality: QualityItem[],
+    score: Score,
+    gaps: any
+) {
     const scriptsSection = generateScriptsSection();
     const dependenciesSection = generateDependenciesSection();
 
+    // ==============================
+    // 🧠 GAP SECTION (NOVO)
+    // ==============================
+    const gapsSection = `
+## 🧠 GAP Analysis
+
+- Empty Search: ${gaps.missingEmptySearch ? "❌ Missing" : "✅ OK"}
+- Error Handling: ${gaps.missingErrorHandling ? "❌ Missing" : "✅ OK"}
+- Pagination: ${gaps.missingPagination ? "❌ Missing" : "✅ OK"}
+- Status Check: ${gaps.missingStatusCheck ? "❌ Missing" : "✅ OK"}
+- Uncovered Endpoints: ${gaps.uncoveredEndpoints?.length || 0}
+
+---`;
+
     const content = `
 <p align="center">
-  <img src="https://img.shields.io/badge/Cypress-Tests-brightgreen?style=for-the-badge&logo=cypress" />
-  <img src="https://img.shields.io/badge/CI-GitHub%20Actions-blue?style=for-the-badge&logo=githubactions" />
-  <img src="https://img.shields.io/badge/AI-QA%20Agent-black?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/QA-${score.finalScore}%25-${getBadgeColor(score.finalScore)}?style=for-the-badge" />
 </p>
 
 # 🚀 Cypress AI Automation Project
 
-Projeto de automação com Cypress evoluído para um **Agente Inteligente de QA**, capaz de gerar, analisar e corrigir testes automaticamente.
+Projeto de automação com Cypress evoluído para um **Agente Inteligente de QA**.
 
 ---
 
@@ -149,35 +184,49 @@ ${scriptsSection}
 
 ---
 
-## 🧠 Capacidades do Agente
+## 📊 QA Score
 
-- ✔ Geração automática de testes E2E
-- ✔ Captura de APIs reais
-- ✔ Análise de cobertura
-- ✔ Análise de qualidade
-- ✔ Extração de fluxo de UI
-- ✔ Deduplicação inteligente
-- ✔ Self-healing
-- ✔ Geração automática de README
+### 📈 Resultado atual
+
+\`\`\`
+Coverage: ${score.coverageScore}%
+API Quality: ${score.apiQualityScore}%
+E2E Quality: ${score.e2eQualityScore}%
+
+Final Score: ${score.finalScore}/100
+\`\`\`
+
+### 🧮 Cálculo
+
+- Coverage → 40%
+- API Quality → 30%
+- E2E Quality → 30%
 
 ---
 
-## 📊 Integrações
+${gapsSection}
 
-- ✔ CI/CD com GitHub Actions
-- ✔ Cypress Cloud integrado
+## 📡 Cobertura
+
+- Endpoints analisados: ${coverage.length}
+- Cobertos: ${coverage.filter(c => c.covered).length}
+
+---
+
+## 🧪 Qualidade dos Testes
+
+${quality.map(q => `
+### ${q.file}
+
+- Status: ${q.hasStatusCheck ? "✅" : "❌"}
+- Error: ${q.hasErrorTest ? "✅" : "❌"}
+- Pagination: ${q.hasPagination ? "✅" : "❌"}
+- Schema: ${q.hasSchemaValidation ? "✅" : "❌"}
+`).join("\n")}
 
 ---
 
 ## 🚀 Execução
-
-### Rodar testes
-
-\`\`\`bash
-npx cypress run
-\`\`\`
-
-### Rodar agente
 
 \`\`\`bash
 npx ts-node scripts/ai-agent/index.ts
@@ -185,18 +234,32 @@ npx ts-node scripts/ai-agent/index.ts
 
 ---
 
-## 👨‍💻 Responsável
+## 👨‍💻 Autor
 
-**Luan Macedo de Jesus Santos Araujo**
-
----
-
-## 🧠 Visão
-
-Evolução da automação tradicional para um modelo de QA inteligente baseado em dados, comportamento e auto-aprendizado.
+Luan Macedo
 `;
 
     fs.writeFileSync("README.md", content);
 
-    console.log("📄 README atualizado com scripts e dependências");
+    // ==============================
+    // 📊 LOG LIMPO (NOVO)
+    // ==============================
+    console.log("\n📊 QA SCORE\n");
+    console.log(`Coverage: ${score.coverageScore}%`);
+    console.log(`API Quality: ${score.apiQualityScore}%`);
+    console.log(`E2E Quality: ${score.e2eQualityScore}%`);
+    console.log(`\n🏁 Final Score: ${score.finalScore}/100`);
+
+    console.log("\n🧠 GAPS:");
+    console.log(gaps);
+
+    console.log("\n📄 README atualizado com QA Score dinâmico\n");
+}
+
+// ================= HELPERS =================
+
+function getBadgeColor(score: number) {
+    if (score >= 90) return "brightgreen";
+    if (score >= 70) return "yellow";
+    return "red";
 }

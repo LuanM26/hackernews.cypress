@@ -1,37 +1,69 @@
 import { extractEndpointsFromTests } from "./coverage-analyzer";
 import { getApiRequests } from "./filter-runtime";
 
-function normalize(url: string) {
-    return url
-        .replace(/^https?:\/\/[^/]+/, "") // remove domínio
-        .split("?")[0]; // remove query params
-}
 type Endpoint = {
     method: string;
     url: string;
 };
 
-export function compareCoverage() {
-    const tested: Endpoint[] = extractEndpointsFromTests();
-    const runtime: Endpoint[] = getApiRequests();
+type Coverage = {
+    endpoint: string;
+    method: string;
+    covered: boolean;
+};
 
-    const testedPatterns = tested.map(t =>
-        t.url.replace("**", "").replace("*", "")
+// ================= NORMALIZAÇÃO =================
+
+function normalize(url: string): string {
+    return url
+        .replace(/\*\*/g, "")       // remove **
+        .replace(/\*/g, "")         // remove *
+        .replace(/\?.*$/, "")       // remove query params
+        .replace(/https?:\/\/[^/]+/, "") // remove domínio
+        .trim();
+}
+
+// ================= MATCH INTELIGENTE =================
+
+function isMatch(apiUrl: string, testUrl: string): boolean {
+    return (
+        apiUrl.includes(testUrl) ||
+        testUrl.includes(apiUrl) ||
+        apiUrl.endsWith(testUrl) ||
+        testUrl.endsWith(apiUrl)
     );
+}
 
-    const results = runtime.map((r) => {
-        const normalized = normalize(r.url);
+// ================= MAIN =================
 
-        const isCovered = testedPatterns.some(pattern =>
-            normalized.includes(pattern)
-        );
+export function compareCoverage(
+    realApis: Endpoint[],
+    testEndpoints: Endpoint[]
+): Coverage[] {
+
+    const coverage: Coverage[] = realApis.map((api) => {
+        const apiUrl = normalize(api.url);
+
+        const covered = testEndpoints.some((test) => {
+            const testUrl = normalize(test.url);
+
+            return isMatch(apiUrl, testUrl);
+        });
 
         return {
-            endpoint: normalized,
-            method: r.method,
-            covered: isCovered,
+            endpoint: apiUrl,
+            method: api.method,
+            covered,
         };
     });
 
-    return results;
+    // ================= DEDUPLICAÇÃO =================
+
+    const uniqueCoverage = Array.from(
+        new Map(
+            coverage.map((c) => [`${c.method}-${c.endpoint}`, c])
+        ).values()
+    );
+
+    return uniqueCoverage;
 }

@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>QA Dashboard</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #0f172a;
+      color: #fff;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .card {
+      background: #1e293b;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+    }
+
+    .bar {
+      height: 20px;
+      border-radius: 5px;
+      margin-top: 5px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    td, th {
+      padding: 10px;
+      border-bottom: 1px solid #334155;
+      text-align: left;
+    }
+
+    .good { color: #22c55e; }
+    .bad { color: #ef4444; }
+  </style>
+</head>
+
+<body>
+
+<h1>📊 QA Dashboard</h1>
+
+<div class="card">
+  <h2>🏁 Final Score: 85/100</h2>
+</div>
+
+<div class="card">
+  <h3>Coverage (100%)</h3>
+  <div class="bar" style="width:100%; background:#22c55e"></div>
+
+  <h3>API Quality (100%)</h3>
+  <div class="bar" style="width:100%; background:#22c55e"></div>
+
+  <h3>E2E Quality (50%)</h3>
+  <div class="bar" style="width:50%; background:#ef4444"></div>
+</div>
+
+<div class="card">
+  <h2>📡 Coverage</h2>
+  <p>Total: 1</p>
+  <p>Covered: 1</p>
+</div>
+
+<div class="card">
+  <h2>🧪 Test Quality</h2>
+  <table>
+    <tr>
+      <th>File</th>
+      <th>Status</th>
+      <th>Error</th>
+      <th>Pagination</th>
+      <th>Schema</th>
+    </tr>
+
+    
+      <tr>
+        <td>cypress\e2e\api\auto-generated.cy.ts</td>
+        <td class="good">✔</td>
+        <td class="good">✔</td>
+        <td class="good">✔</td>
+        <td class="good">✔</td>
+      </tr>
+    
+      <tr>
+        <td>cypress\e2e\tests\auto-generated-e2e.cy.ts</td>
+        <td class="good">✔</td>
+        <td class="bad">✖</td>
+        <td class="bad">✖</td>
+        <td class="good">✔</td>
+      </tr>
+    
+      <tr>
+        <td>cypress\e2e\tests\pagina.cy.js</td>
+        <td class="good">✔</td>
+        <td class="bad">✖</td>
+        <td class="bad">✖</td>
+        <td class="good">✔</td>
+      </tr>
+    
+
+  </table>
+</div>
+
+</body>
+</html>

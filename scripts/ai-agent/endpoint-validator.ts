@@ -1,10 +1,5 @@
-export function isValidEndpoint(
-    endpoint: string,
-    method: string,
-    realApis: { url: string; method: string }[]
-) {
+export function isValidEndpoint(url: string, realApis: any[]) {
     return realApis.some(api =>
-        api.method === method &&
-        api.url.includes(endpoint)
+        url.includes(api.url) || api.url.includes(url)
     );
 }

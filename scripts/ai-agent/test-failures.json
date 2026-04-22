@@ -63,5 +63,145 @@
     "title": "should improve GET /api/v1/search",
     "error": "expected '<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1,shrink-to-fit=no\"><meta name=\"theme-color\" content=\"#000000\"><link rel=\"manifest\" href=\"/manifest.json\"><link rel=\"shortcut icon\" href=\"/favicon.ico\"><title>React App</title><script defer=\"defer\" src=\"/static/js/main.0ca0035f.js\"></script><link href=\"/static/css/main.dd8135da.css\" rel=\"stylesheet\"></head><body><noscript>You need to enable JavaScript to run this app.</noscript><div id=\"root\" role=\"main\"></div></body></html>' to have property 'hits'",
     "file": "auto-generated.cy.ts"
+  },
+  {
+    "title": "should handle search error",
+    "error": "E2E_FORCED_ERROR_VALIDATION",
+    "file": "auto-generated-e2e.cy.ts"
+  },
+  {
+    "title": "should handle search error",
+    "error": "E2E_FORCED_ERROR_VALIDATION",
+    "file": "auto-generated-e2e.cy.ts"
+  },
+  {
+    "title": "should handle search error",
+    "error": "teardown is not defined",
+    "file": "auto-generated-e2e.cy.ts"
+  },
+  {
+    "title": "should handle search error",
+    "error": "E2E_FORCED_ERROR_VALIDATION",
+    "file": "auto-generated-e2e.cy.ts"
+  },
+  {
+    "title": "deve validar múltiplos itens via fixture e intercept",
+    "error": "An error was thrown while processing a network event: A fixture file could not be found at any of the following paths:\n\n    > cypress\\fixtures\\search-results.json\n    > cypress\\fixtures\\search-results.json.[ext]\n\nCypress looked for these file extensions at the provided path:\n\n    > .json, .js, .coffee, .html, .txt, .csv, .png, .jpg, .jpeg, .gif, .tif, .tiff, .zip\n\nProvide a path to an existing fixture file.",
+    "file": "pagina.cy.js"
+  },
+  {
+    "title": "deve validar a presença de elementos usando custom command",
+    "error": "cy.validateElementPresence is not a function",
+    "file": "pagina.cy.js"
+  },
+  {
+    "title": "deve validar erro de rede usando custom command",
+    "error": "cy.validateNetworkError is not a function",
+    "file": "pagina.cy.js"
+  },
+  {
+    "title": "should handle search error",
+    "error": "E2E_FORCED_ERROR_VALIDATION",
+    "file": "auto-generated-e2e.cy.ts"
+  },
+  {
+    "title": "should validate pagination",
+    "error": "`cy.wrap()` timed out waiting `8000ms` to complete.\n\nYou called `cy.wrap()` with a promise that never resolved.\n\nTo increase the timeout, use `{ timeout: number }`",
+    "file": "auto-generated.cy.ts"
+  },
+  {
+    "title": "should perform search with dynamic data",
+    "error": "The following error originated from your application code, not from Cypress.\n\n  > Cannot read properties of null (reading 'patria')\n\nWhen Cypress detects uncaught errors originating from your application it will automatically fail the current test.\n\nThis behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.",
+    "file": "auto-generated-e2e.cy.ts"
+  },
+  {
+    "title": "should handle API failure gracefully",
+    "error": "The following error originated from your application code, not from Cypress.\n\n  > Cannot read properties of null (reading 'reduxtest')\n\nWhen Cypress detects uncaught errors originating from your application it will automatically fail the current test.\n\nThis behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.",
+    "file": "auto-generated-e2e.cy.ts"
+  },
+  {
+    "title": "should search using keyboard only",
+    "error": "The following error originated from your application code, not from Cypress.\n\n  > Cannot read properties of null (reading 'reduxcypress')\n\nWhen Cypress detects uncaught errors originating from your application it will automatically fail the current test.\n\nThis behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.",
+    "file": "auto-generated-e2e.cy.ts"
+  },
+  {
+    "title": "should perform search with dynamic data",
+    "error": "The following error originated from your application code, not from Cypress.\n\n  > Cannot read properties of null (reading 'patria')\n\nWhen Cypress detects uncaught errors originating from your application it will automatically fail the current test.\n\nThis behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.",
+    "file": "auto-generated-e2e.cy.ts"
+  },
+  {
+    "title": "should handle API failure gracefully",
+    "error": "The following error originated from your application code, not from Cypress.\n\n  > Cannot read properties of null (reading 'reduxtest')\n\nWhen Cypress detects uncaught errors originating from your application it will automatically fail the current test.\n\nThis behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.",
+    "file": "auto-generated-e2e.cy.ts"
+  },
+  {
+    "title": "should search using keyboard only",
+    "error": "The following error originated from your application code, not from Cypress.\n\n  > Cannot read properties of null (reading 'reduxcypress')\n\nWhen Cypress detects uncaught errors originating from your application it will automatically fail the current test.\n\nThis behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.",
+    "file": "auto-generated-e2e.cy.ts"
+  },
+  {
+    "title": "should perform search with dynamic data",
+    "error": "The following error originated from your application code, not from Cypress.\n\n  > Cannot read properties of null (reading 'thema')\n\nWhen Cypress detects uncaught errors originating from your application it will automatically fail the current test.\n\nThis behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.",
+    "file": "auto-generated-e2e.cy.ts"
+  },
+  {
+    "title": "should handle API failure gracefully",
+    "error": "The following error originated from your application code, not from Cypress.\n\n  > Cannot read properties of null (reading 'reduxtest')\n\nWhen Cypress detects uncaught errors originating from your application it will automatically fail the current test.\n\nThis behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.",
+    "file": "auto-generated-e2e.cy.ts"
+  },
+  {
+    "title": "should search using keyboard only",
+    "error": "The following error originated from your application code, not from Cypress.\n\n  > Cannot read properties of null (reading 'reduxcypress')\n\nWhen Cypress detects uncaught errors originating from your application it will automatically fail the current test.\n\nThis behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.",
+    "file": "auto-generated-e2e.cy.ts"
+  },
+  {
+    "title": "should perform search successfully",
+    "error": "The following error originated from your application code, not from Cypress.\n\n  > Cannot read properties of null (reading 'accommodo')\n\nWhen Cypress detects uncaught errors originating from your application it will automatically fail the current test.\n\nThis behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.",
+    "file": "auto-generated-e2e.cy.ts"
+  },
+  {
+    "title": "should handle API error",
+    "error": "The following error originated from your application code, not from Cypress.\n\n  > Cannot read properties of null (reading 'reduxtest')\n\nWhen Cypress detects uncaught errors originating from your application it will automatically fail the current test.\n\nThis behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.",
+    "file": "auto-generated-e2e.cy.ts"
+  },
+  {
+    "title": "should perform search",
+    "error": "The following error originated from your application code, not from Cypress.\n\n  > Cannot read properties of null (reading 'reduxangulus')\n\nWhen Cypress detects uncaught errors originating from your application it will automatically fail the current test.\n\nThis behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.",
+    "file": "auto-generated-e2e.cy.ts"
+  },
+  {
+    "title": "should handle empty search",
+    "error": "The following error originated from your application code, not from Cypress.\n\n  > Cannot read properties of null (reading '')\n\nWhen Cypress detects uncaught errors originating from your application it will automatically fail the current test.\n\nThis behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.",
+    "file": "auto-generated-e2e.cy.ts"
+  },
+  {
+    "title": "should perform multiple searches",
+    "error": "The following error originated from your application code, not from Cypress.\n\n  > Cannot read properties of null (reading 'react')\n\nWhen Cypress detects uncaught errors originating from your application it will automatically fail the current test.\n\nThis behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.",
+    "file": "auto-generated-e2e.cy.ts"
+  },
+  {
+    "title": "should handle rapid interactions",
+    "error": "The following error originated from your application code, not from Cypress.\n\n  > Cannot read properties of null (reading 'test0')\n\nWhen Cypress detects uncaught errors originating from your application it will automatically fail the current test.\n\nThis behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.",
+    "file": "auto-generated-e2e.cy.ts"
+  },
+  {
+    "title": "should perform search successfully",
+    "error": "expected undefined to equal 200",
+    "file": "auto-generated-e2e.cy.ts"
+  },
+  {
+    "title": "should perform search successfully",
+    "error": "expected undefined to exist",
+    "file": "auto-generated-e2e.cy.ts"
+  },
+  {
+    "title": "should perform search successfully",
+    "error": "expected undefined to equal 200",
+    "file": "auto-generated-e2e.cy.ts"
+  },
+  {
+    "title": "Deve encontrar o elemento de Search e digitar algo do pelo Faker",
+    "error": "Cannot read properties of undefined (reading 'statusCode')",
+    "file": "pagina.cy.js"
   }
 ]

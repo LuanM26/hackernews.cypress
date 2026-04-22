@@ -31,7 +31,7 @@ describe('Pagina', () => {
     });
   });
 
-  it('Deve encontrar o elemento de Search e digitar algo do pelo Faker', () => {
+  it('deve encontrar o elemento de Search e digitar algo do pelo Faker', () => {
     const { faker } = require('@faker-js/faker');
 
     cy.intercept('GET', '**/search*').as('searchRequest')
@@ -44,9 +44,7 @@ describe('Pagina', () => {
       expect(response.body.hits).to.have.length.greaterThan(0);
     });
   });
-  it('Deve validar a exibição de erro de rede', () => {
-
-    Cypress.on('uncaught:exception', () => false);
+  it('deve validar a exibição de erro de rede', () => {
 
     cy.intercept('GET', '**/search*', {
       forceNetworkError: true

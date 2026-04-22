@@ -1,131 +1,174 @@
 import fs from "fs";
 import path from "path";
-import { extractUIFlows } from "./extract-ui-flow";
-import { fixSelector, enhanceSelector } from "./selector-utils";
+import { getApiRequests } from "./filter-runtime";
+import { fixEndpoint } from "./auto-fix-endpoint";
+import { testAlreadyExists } from "./test-exists";
 
-// ================= DEDUP =================
+type Endpoint = {
+  method: string;
+  url: string;
+};
 
-function deduplicateFlows(flows: any[]) {
-    const seen = new Set<string>();
+export function generateE2E(gaps: any) {
+  const apis: Endpoint[] = getApiRequests();
 
-    return flows.filter((flow) => {
-        const key = flow.actions
-            .map((a: string) => a.trim().toLowerCase())
-            .join("|");
+  if (!apis.length) {
+    console.log("⚠️ Nenhuma API encontrada");
+    return;
+  }
 
-        if (seen.has(key)) return false;
+  const filePath = path.resolve(
+    "cypress/e2e/api/auto-generated.cy.ts"
+  );
 
-        seen.add(key);
-        return true;
+  const fileExists = fs.existsSync(filePath);
+  let content = "";
+
+  const generated = new Set<string>();
+
+  function shouldGenerate(name: string) {
+    if (generated.has(name)) return false;
+    if (testAlreadyExists(filePath, name)) return false;
+
+    generated.add(name);
+    return true;
+  }
+
+  // ==============================
+  // HEADER
+  // ==============================
+  if (!fileExists) {
+    content += `
+describe('API Auto Generated (Smart)', () => {
+`;
+  }
+
+  const baseApi = fixEndpoint(apis[0].url);
+
+  // ==============================
+  // 🔹 SUCCESS TEST
+  // ==============================
+  if (shouldGenerate("should validate success response")) {
+    content += `
+  it('should validate success response', () => {
+
+    cy.request({
+      method: 'GET',
+      url: '${baseApi}',
+      failOnStatusCode: false
+    }).then((response) => {
+
+      expect(response.status).to.eq(200);
+      expect(response.body).to.exist;
+      expect(response.body).to.have.property('hits');
+      expect(response.body.hits).to.be.an('array');
+
     });
-}
 
-// ================= PARSE =================
+  });
+`;
+  }
 
-function parseSelector(action: string): string {
-    const raw = action.replace("get ", "").trim();
-    return raw.replace(/['"]/g, "");
-}
+  // ==============================
+  // 🔹 ERROR TEST
+  // ==============================
+  if (gaps.missingErrorHandling && shouldGenerate("should handle API error")) {
+    content += `
+  it('should handle API error', () => {
 
-// ================= INTENT =================
+    cy.request({
+      method: 'GET',
+      url: '${baseApi}?invalid=true',
+      failOnStatusCode: false
+    }).then((response) => {
 
-function detectIntent(actions: string[]): string {
-    if (actions.includes("type") && actions.includes("click")) return "search";
-    if (actions.some((a) => a.includes("page"))) return "pagination";
-    return "generic";
-}
+      expect(response.status).to.not.eq(200);
 
-// ================= MAIN =================
+    });
 
-export function generateE2ETests() {
-    const flows = extractUIFlows();
-    const validFlows = deduplicateFlows(flows);
+  });
+`;
+  }
 
-    let content = `import { faker } from '@faker-js/faker';\n\n`;
+  // ==============================
+  // 🔹 EMPTY SEARCH
+  // ==============================
+  if (gaps.missingEmptySearch && shouldGenerate("should handle empty search")) {
+    content += `
+  it('should handle empty search', () => {
 
-    content += `describe('E2E Auto Generated (AI Level 5)', () => {\n\n`;
+    cy.request({
+      method: 'GET',
+      url: '${baseApi}?query=',
+      failOnStatusCode: false
+    }).then((response) => {
+
+      expect(response.status).to.eq(200);
+      expect(response.body.hits).to.be.an('array');
+
+    });
+
+  });
+`;
+  }
+
+  // ==============================
+  // 🔹 PAGINATION CONSISTENCY (🔥 CORRIGIDO)
+  // ==============================
+  if (gaps.missingPagination && shouldGenerate("should validate pagination consistency")) {
+    const urls = apis.map(api => `'${fixEndpoint(api.url)}'`).join(",\n      ");
 
     content += `
-  before(() => {
-    Cypress.on('uncaught:exception', () => false);
-  });\n\n`;
+  it('should validate pagination consistency', () => {
 
-    validFlows.forEach((flow, index) => {
-        if (!flow.actions || flow.actions.length === 0) return;
+    const urls: string[] = [
+      ${urls}
+    ];
 
-        let lastSelector = "";
-        const intent = detectIntent(flow.actions);
+    const results: Cypress.Response<any>[] = [];
 
-        // ================= POSITIVE TEST =================
+    cy.wrap(urls).each((url) => {
 
-        content += `  it('should perform ${intent} successfully', () => {\n`;
+      const requestUrl = String(url);
 
-        content += `    cy.intercept('GET', '**/search*').as('apiCall');\n`;
+      cy.request(requestUrl).then((res) => {
+        results.push(res);
+      });
 
-        flow.actions.forEach((action: string) => {
-            if (action.startsWith("visit")) {
-                const url = action.replace("visit ", "").replace(/['"]/g, "");
-                content += `    cy.visit('${url}');\n`;
-            }
+    }).then(() => {
 
-            if (action.startsWith("get")) {
-                const selector = parseSelector(action);
-                const safeSelector = enhanceSelector(fixSelector(selector));
+      expect(results.length).to.eq(urls.length);
 
-                lastSelector = safeSelector;
+      results.forEach((res) => {
+        expect(res.status).to.eq(200);
+        expect(res.body).to.have.property('hits');
+      });
 
-                content += `    cy.get('${safeSelector}').should('be.visible');\n`;
-            }
+      if (results.length >= 2) {
+        expect(results[0].body.hits).to.not.deep.equal(
+          results[1].body.hits
+        );
+      }
 
-            if (action === "type" && lastSelector) {
-                content += `    cy.get('${lastSelector}').clear().type(faker.lorem.word());\n`;
-            }
-
-            if (action === "click" && lastSelector) {
-                content += `    cy.get('${lastSelector}').click({ force: true });\n`;
-            }
-        });
-
-        // 🔥 valida API automaticamente
-        content += `
-    cy.wait('@apiCall').then(({ response }) => {
-      expect(response.statusCode).to.eq(200);
-      expect(response.body).to.have.property('hits');
-    });
-    `;
-
-        content += `  });\n\n`;
-
-        // ================= NEGATIVE TEST =================
-
-        if (intent === "search") {
-            content += `  it('should handle ${intent} error', () => {\n`;
-
-            content += `
-    cy.intercept('GET', '**/search*', {
-      forceNetworkError: true
     });
 
-    cy.visit('/');
-
-    cy.get('input').type('test{enter}');
-
-    cy.contains('Something went wrong').should('be.visible');
+  });
 `;
+  }
 
-            content += `  });\n\n`;
-        }
-    });
+  // ==============================
+  // FOOTER
+  // ==============================
+  if (!fileExists) {
+    content += `
+});
+`;
+  }
 
-    content += `});`;
-
-    // ================= SAVE =================
-
-    const filePath = path.resolve(
-        "cypress/e2e/tests/auto-generated-e2e.cy.ts"
-    );
-
-    fs.writeFileSync(filePath, content);
-
-    console.log("🤖 E2E nível 5 (produção real) gerado com sucesso");
+  if (content.trim()) {
+    fs.appendFileSync(filePath, content);
+    console.log("🤖 API tests gerados com qualidade alta");
+  } else {
+    console.log("🧠 Nenhum E2E novo necessário");
+  }
 }
