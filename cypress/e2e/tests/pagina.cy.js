@@ -31,7 +31,7 @@ describe('Pagina', () => {
     });
   });
 
-  it('deve encontrar o elemento de Search e digitar algo do pelo Faker', () => {
+  it('You must find the Search element and type something using Faker', () => {
     const { faker } = require('@faker-js/faker');
 
     cy.intercept('GET', '**/search*').as('searchRequest')
@@ -44,7 +44,7 @@ describe('Pagina', () => {
       expect(response.body.hits).to.have.length.greaterThan(0);
     });
   });
-  it('deve validar a exibição de erro de rede', () => {
+  it('You must validate the display of network error', () => {
 
     cy.intercept('GET', '**/search*', {
       forceNetworkError: true
@@ -55,7 +55,7 @@ describe('Pagina', () => {
     cy.contains('Something went wrong.')
       .should('be.visible');
   });
-  it('deve alterar a ordem ao clicar em Title', () => {
+  it('You must change the order when clicking on Title', () => {
 
     cy.intercept('GET', '**/search*')
       .as('getTopStories')
@@ -83,7 +83,7 @@ describe('Pagina', () => {
 
     })
   })
-  it('deve alterar a ordem ao clicar em Author', () => {
+  it('You must change the order when clicking on Author', () => {
 
     cy.intercept('GET', '**/search*')
       .as('getTopStories')
@@ -111,7 +111,7 @@ describe('Pagina', () => {
 
     })
   })
-  it('deve alterar a ordem ao clicar em Comments', () => {
+  it('You must change the order when clicking on Comments', () => {
 
     cy.intercept('GET', '**/search*')
       .as('getTopStories')
@@ -139,7 +139,7 @@ describe('Pagina', () => {
 
     })
   })
-  it('deve alterar a ordem ao clicar em Points', () => {
+  it('You must change the order when clicking on Points', () => {
 
     cy.intercept('GET', '**/search*')
       .as('getTopStories')
@@ -168,7 +168,7 @@ describe('Pagina', () => {
 
     })
   })
-  it('deve excluir um item da lista com clicar em Archive', () => {
+  it('You must delete an item from the list by clicking on Archive', () => {
     cy.intercept('GET', '**/search*')
       .as('getTopStories')
 
@@ -180,7 +180,7 @@ describe('Pagina', () => {
       })
     })
   })
-  it('deve encontrar o botão more e clicar para carregar mais itens', () => {
+  it('You must find the More button and click it to load more items', () => {
     cy.intercept('GET', '**/search*')
       .as('getTopStories')
 
@@ -195,7 +195,7 @@ describe('Pagina', () => {
       })
     });
   });
-  it('deve validar múltiplos itens via fixture', () => {
+  it('You must validate multiple items via fixture', () => {
     cy.validateTopNLinks('.table-row a', 5)
   })
 });

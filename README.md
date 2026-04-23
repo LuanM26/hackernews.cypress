@@ -97,7 +97,7 @@ Projeto de automação com Cypress evoluído para um **Agente Inteligente de QA*
 
 - Empty Search: ✅ OK
 - Error Handling: ✅ OK
-- Pagination: ✅ OK
+- Pagination: ❌ Missing
 - Status Check: ✅ OK
 - Uncovered Endpoints: 0
 
@@ -115,18 +115,18 @@ Projeto de automação com Cypress evoluído para um **Agente Inteligente de QA*
 
 ### C:\hackernews.cypress\cypress\e2e\api\auto-generated.cy.ts
 
-- Status: ✅
-- Error: ✅
-- Pagination: ✅
-- Schema: ✅
+- Status: ❌
+- Error: ❌
+- Pagination: ❌
+- Schema: ❌
 
 
 ### C:\hackernews.cypress\cypress\e2e\tests\auto-generated-e2e.cy.ts
 
-- Status: ✅
-- Error: ✅
-- Pagination: ✅
-- Schema: ✅
+- Status: ❌
+- Error: ❌
+- Pagination: ❌
+- Schema: ❌
 
 
 ### C:\hackernews.cypress\cypress\e2e\tests\pagina.cy.js
