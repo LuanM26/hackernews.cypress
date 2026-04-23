@@ -203,5 +203,55 @@
     "title": "Deve encontrar o elemento de Search e digitar algo do pelo Faker",
     "error": "Cannot read properties of undefined (reading 'statusCode')",
     "file": "pagina.cy.js"
+  },
+  {
+    "title": "should return successful response (E2E)",
+    "error": "The following error originated from your application code, not from Cypress.\n\n  > Cannot read properties of null (reading 'redux')\n\nWhen Cypress detects uncaught errors originating from your application it will automatically fail the current test.\n\nThis behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.",
+    "file": "auto-generated-e2e.cy.ts"
+  },
+  {
+    "title": "should handle empty search (E2E)",
+    "error": "`cy.type()` cannot accept an empty string. You need to actually type something.",
+    "file": "auto-generated-e2e.cy.ts"
+  },
+  {
+    "title": "should handle invalid input (E2E)",
+    "error": "The following error originated from your application code, not from Cypress.\n\n  > Cannot read properties of null (reading '%%%INVALID%%%')\n\nWhen Cypress detects uncaught errors originating from your application it will automatically fail the current test.\n\nThis behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.",
+    "file": "auto-generated-e2e.cy.ts"
+  },
+  {
+    "title": "should validate pagination (E2E)",
+    "error": "The following error originated from your application code, not from Cypress.\n\n  > Cannot read properties of null (reading 'redux')\n\nWhen Cypress detects uncaught errors originating from your application it will automatically fail the current test.\n\nThis behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.",
+    "file": "auto-generated-e2e.cy.ts"
+  },
+  {
+    "title": "should handle empty search (E2E)",
+    "error": "`cy.type()` cannot accept an empty string. You need to actually type something.",
+    "file": "auto-generated-e2e.cy.ts"
+  },
+  {
+    "title": "should return successful response (E2E)",
+    "error": "The following error originated from your application code, not from Cypress.\n\n  > Cannot read properties of null (reading 'redux')\n\nWhen Cypress detects uncaught errors originating from your application it will automatically fail the current test.\n\nThis behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.",
+    "file": "auto-generated-e2e.cy.ts"
+  },
+  {
+    "title": "should handle empty search (E2E)",
+    "error": "`cy.type()` cannot accept an empty string. You need to actually type something.",
+    "file": "auto-generated-e2e.cy.ts"
+  },
+  {
+    "title": "should handle invalid input (E2E)",
+    "error": "The following error originated from your application code, not from Cypress.\n\n  > Cannot read properties of null (reading '%%%INVALID%%%')\n\nWhen Cypress detects uncaught errors originating from your application it will automatically fail the current test.\n\nThis behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.",
+    "file": "auto-generated-e2e.cy.ts"
+  },
+  {
+    "title": "should validate pagination (E2E)",
+    "error": "The following error originated from your application code, not from Cypress.\n\n  > Cannot read properties of null (reading 'redux')\n\nWhen Cypress detects uncaught errors originating from your application it will automatically fail the current test.\n\nThis behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.",
+    "file": "auto-generated-e2e.cy.ts"
+  },
+  {
+    "title": "should handle empty search (E2E)",
+    "error": "`cy.type()` cannot accept an empty string. You need to actually type something.",
+    "file": "auto-generated-e2e.cy.ts"
   }
 ]

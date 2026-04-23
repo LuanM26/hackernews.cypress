@@ -57,6 +57,7 @@ Projeto de automação com Cypress evoluído para um **Agente Inteligente de QA*
 | Script | Descrição |
 |--------|----------|
 | agent-config | Script do agente |
+| ai-scenario-generator | Script do agente |
 | analyze-existing-tests | Script do agente |
 | analyze-failures | Analisa falhas dos testes |
 | analyze-test-quality | Avalia qualidade dos testes |
@@ -82,31 +83,12 @@ Projeto de automação com Cypress evoluído para um **Agente Inteligente de QA*
 | index | Orquestrador do agente |
 | qa-score | Calcula QA Score |
 | read-existing-e2e | Script do agente |
+| read-existing-scenarios | Script do agente |
 | read-project | Lê estrutura do projeto |
 | selector-utils | Corrige seletores |
 | self-heal | Auto-correção de testes |
 | test-exists | Script do agente |
 
-
----
-
-## 📊 QA Score
-
-### 📈 Resultado atual
-
-```
-Coverage: 100%
-API Quality: 100%
-E2E Quality: 100%
-
-Final Score: 100/100
-```
-
-### 🧮 Cálculo
-
-- Coverage → 40%
-- API Quality → 30%
-- E2E Quality → 30%
 
 ---
 

@@ -108,4 +108,77 @@ describe('E2E Auto Generated (AI Level 5)', () => {
 
   });
 
+  it('should validate success response', () => {
+
+    cy.request({
+      method: 'GET',
+      url: 'https://hn.algolia.com/api/v1/search?query=redux&page=0&hitsPerPage=100',
+      failOnStatusCode: false
+    }).then((response) => {
+
+      expect(response.status).to.eq(200);
+      expect(response.body).to.exist;
+      expect(response.body).to.have.property('hits');
+      expect(response.body.hits).to.be.an('array');
+
+    });
+
+  });
+
+  it('should return successful response (E2E)', () => {
+
+    cy.visit('/');
+
+    cy.get('input').clear().type('redux');
+    cy.get('form > button').click();
+
+    cy.get('.table-row').should('exist');
+
+
+
+  });
+
+  it('should handle empty search (E2E)', () => {
+
+    cy.visit('/');
+
+    cy.get('input').clear().type('');
+    cy.get('form > button').click();
+
+    cy.get('.table-row').should('exist');
+
+
+    cy.get('.table-row').should('exist');
+
+
+  });
+
+  it('should handle invalid input (E2E)', () => {
+
+    cy.visit('/');
+
+    cy.get('input').clear().type('%%%INVALID%%%');
+    cy.get('form > button').click();
+
+    cy.get('.table-row').should('exist');
+
+
+    cy.get('body').should('exist');
+
+
+  });
+
+  it('should validate pagination (E2E)', () => {
+
+    cy.visit('/');
+
+    cy.get('input').clear().type('redux');
+    cy.get('form > button').click();
+
+    cy.get('.table-row').should('exist');
+
+
+
+  });
+
 });

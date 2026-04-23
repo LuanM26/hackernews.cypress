@@ -184,26 +184,6 @@ ${scriptsSection}
 
 ---
 
-## 📊 QA Score
-
-### 📈 Resultado atual
-
-\`\`\`
-Coverage: ${score.coverageScore}%
-API Quality: ${score.apiQualityScore}%
-E2E Quality: ${score.e2eQualityScore}%
-
-Final Score: ${score.finalScore}/100
-\`\`\`
-
-### 🧮 Cálculo
-
-- Coverage → 40%
-- API Quality → 30%
-- E2E Quality → 30%
-
----
-
 ${gapsSection}
 
 ## 📡 Cobertura
@@ -244,11 +224,6 @@ Luan Macedo
     // ==============================
     // 📊 LOG LIMPO (NOVO)
     // ==============================
-    console.log("\n📊 QA SCORE\n");
-    console.log(`Coverage: ${score.coverageScore}%`);
-    console.log(`API Quality: ${score.apiQualityScore}%`);
-    console.log(`E2E Quality: ${score.e2eQualityScore}%`);
-    console.log(`\n🏁 Final Score: ${score.finalScore}/100`);
 
     console.log("\n🧠 GAPS:");
     console.log(gaps);

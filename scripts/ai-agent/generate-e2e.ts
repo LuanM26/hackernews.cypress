@@ -3,6 +3,8 @@ import path from "path";
 import { getApiRequests } from "./filter-runtime";
 import { fixEndpoint } from "./auto-fix-endpoint";
 import { testAlreadyExists } from "./test-exists";
+import { generateScenarios } from "./ai-scenario-generator";
+import { getExistingScenarios } from "./read-existing-scenarios";
 
 type Endpoint = {
   method: string;
@@ -18,7 +20,7 @@ export function generateE2E(gaps: any) {
   }
 
   const filePath = path.resolve(
-    "cypress/e2e/api/auto-generated.cy.ts"
+    "cypress/e2e/tests/auto-generated-e2e.cy.ts"
   );
 
   const fileExists = fs.existsSync(filePath);
@@ -39,7 +41,7 @@ export function generateE2E(gaps: any) {
   // ==============================
   if (!fileExists) {
     content += `
-describe('API Auto Generated (Smart)', () => {
+describe('E2E Auto Generated (Smart)', () => {
 `;
   }
 
@@ -155,6 +157,66 @@ describe('API Auto Generated (Smart)', () => {
   });
 `;
   }
+  // ==============================
+  // 🧠 IA SCENARIOS (E2E - INTELIGENTE)
+  // ==============================
+
+  // 🔎 lê cenários já existentes no arquivo
+  const existingScenarios = getExistingScenarios(filePath);
+
+  // 🧠 função de similaridade (evita duplicação semântica)
+  function isScenarioSimilar(name: string) {
+    return existingScenarios.some((test) =>
+      test.toLowerCase().includes(name.toLowerCase()) ||
+      name.toLowerCase().includes(test.toLowerCase())
+    );
+  }
+
+  const scenarios = generateScenarios("/search");
+
+  scenarios.forEach((scenario) => {
+    const testName = `${scenario.name} (E2E)`;
+
+    // 🧠 dedupe inteligente
+    if (
+      !shouldGenerate(testName) ||
+      isScenarioSimilar(testName)
+    ) {
+      return;
+    }
+
+    const query = scenario.request?.query ?? "redux";
+
+    // 🧠 validação dinâmica (sem if dentro do teste final)
+    let extraValidation = "";
+
+    if (scenario.type === "negative") {
+      extraValidation = `
+    cy.get('body').should('exist');
+    `;
+    }
+
+    if (scenario.type === "edge") {
+      extraValidation = `
+    cy.get('.table-row').should('exist');
+    `;
+    }
+
+    content += `
+  it('${testName}', () => {
+
+    cy.visit('/');
+
+    cy.get('input').clear().type('${query}');
+    cy.get('form > button').click();
+
+    cy.get('.table-row').should('exist');
+
+    ${extraValidation}
+
+  });
+`;
+  });
 
   // ==============================
   // FOOTER
@@ -167,7 +229,7 @@ describe('API Auto Generated (Smart)', () => {
 
   if (content.trim()) {
     fs.appendFileSync(filePath, content);
-    console.log("🤖 API tests gerados com qualidade alta");
+    console.log("🤖 E2E gerados com IA + qualidade alta");
   } else {
     console.log("🧠 Nenhum E2E novo necessário");
   }

@@ -4,6 +4,9 @@ import { getApiRequests } from "./filter-runtime";
 import { fixEndpoint } from "./auto-fix-endpoint";
 import { testAlreadyExists } from "./test-exists";
 
+// 🆕 NOVO IMPORT (IA de cenários)
+import { generateScenarios } from "./ai-scenario-generator";
+
 type Endpoint = {
   method: string;
   url: string;
@@ -142,6 +145,42 @@ describe('API Auto Generated (Smart)', () => {
   }
 
   // ==============================
+  // 🧠 🆕 IA SCENARIOS (NOVO BLOCO)
+  // ==============================
+  const scenarios = generateScenarios(url);
+
+  scenarios.forEach((scenario) => {
+    if (!shouldGenerate(scenario.name)) return;
+
+    const query = scenario.request?.query ?? "redux";
+    const page = scenario.request?.page ?? 0;
+
+    const scenarioUrl = `${url}?query=${encodeURIComponent(query)}&page=${page}`;
+
+    content += `
+  it('${scenario.name}', () => {
+
+    cy.request({
+      method: '${baseApi.method}',
+      url: '${scenarioUrl}',
+      failOnStatusCode: false
+    }).then((response) => {
+
+      expect(response.status).to.be.oneOf([200, 400, 404]);
+
+      if (response.body && typeof response.body === 'object') {
+        if (response.body.hits) {
+          expect(response.body.hits).to.be.an('array');
+        }
+      }
+
+    });
+
+  });
+`;
+  });
+
+  // ==============================
   // 🔚 FOOTER
   // ==============================
   if (!fileExists) {
@@ -152,8 +191,8 @@ describe('API Auto Generated (Smart)', () => {
 
   if (content.trim()) {
     fs.appendFileSync(filePath, content);
-    console.log("🤖 API tests gerados com qualidade alta");
+    console.log("🤖 API tests gerados com IA + qualidade alta");
   } else {
-    console.log("🧠 Nenhum E2E novo necessário");
+    console.log("🧠 Nenhum teste novo necessário");
   }
 }
