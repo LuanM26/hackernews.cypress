@@ -3,22 +3,18 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+
   "scripts": {
-    "qa:agent": "ts-node scripts/ai-agent/index.ts",
-    "qa:full": "npm run qa:agent && npm run qa:test",
-    "qa:test": "cypress run --env grep=@ai-agent",
+    "agent:build": "cd ai-agent-v2 && npm run build",
+    "qa:safe": "cd ai-agent-v2 && node dist/cli/index.js --mode=safe",
+    "qa:full": "cd ai-agent-v2 && node dist/cli/index.js --mode=full",
+    "qa:run": "npm run agent:build && npm run qa:full && npm run cy:run",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
-    "cy:cloud": "cypress run --record",
-    "cy:cloud:parallel": "cypress run --record --parallel",
-    "cy:smoke": "cypress run --env grep=@smoke",
-    "cy:smoke:cloud": "cypress run --record --env grep=@smoke",
-    "cy:api": "cypress run --env grep=@api",
-    "cy:api:cloud": "cypress run --record --env grep=@api",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint:fix": "eslint . --fix"
   },
+
   "keywords": [],
   "author": "",
   "license": "ISC",

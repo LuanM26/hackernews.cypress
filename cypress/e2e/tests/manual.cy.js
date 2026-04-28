@@ -8,30 +8,7 @@ describe('Pagina', () => {
     Cypress.on('uncaught:exception', () => false);
   });
 
-  afterEach(() => {
-    // espera requisições acontecerem
-
-
-    cy.get('@capturedRequests').then((newReqs) => {
-      cy.readFile('scripts/ai-agent/runtime-requests.json', {
-        failOnNonExisting: false,
-      }).then((existing) => {
-        const safe = Array.isArray(existing) ? existing : [];
-
-        const merged = [...safe, ...newReqs];
-
-        const unique = Array.from(
-          new Map(
-            merged.map(item => [`${item.method}-${item.url}`, item])
-          ).values()
-        );
-
-        cy.writeFile('scripts/ai-agent/runtime-requests.json', unique);
-      });
-    });
-  });
-
-  it('You must find the Search element and type something using Faker', () => {
+  it('deve encontrar o elemento de pesquisa e digitar algo usando o Faker.', () => {
     const { faker } = require('@faker-js/faker');
 
     cy.intercept('GET', '**/search*').as('searchRequest')
@@ -44,7 +21,7 @@ describe('Pagina', () => {
       expect(response.body.hits).to.have.length.greaterThan(0);
     });
   });
-  it('You must validate the display of network error', () => {
+  it('deve validar a exibição do erro de rede.', () => {
 
     cy.intercept('GET', '**/search*', {
       forceNetworkError: true
@@ -55,7 +32,7 @@ describe('Pagina', () => {
     cy.contains('Something went wrong.')
       .should('be.visible');
   });
-  it('You must change the order when clicking on Title', () => {
+  it('deve alterar a ordem ao clicar no título.', () => {
 
     cy.intercept('GET', '**/search*')
       .as('getTopStories')
@@ -83,7 +60,7 @@ describe('Pagina', () => {
 
     })
   })
-  it('You must change the order when clicking on Author', () => {
+  it('deve alterar a ordem ao clicar em Author', () => {
 
     cy.intercept('GET', '**/search*')
       .as('getTopStories')
@@ -111,7 +88,7 @@ describe('Pagina', () => {
 
     })
   })
-  it('You must change the order when clicking on Comments', () => {
+  it('deve alterar a ordem ao clicar em Comments', () => {
 
     cy.intercept('GET', '**/search*')
       .as('getTopStories')
@@ -139,7 +116,7 @@ describe('Pagina', () => {
 
     })
   })
-  it('You must change the order when clicking on Points', () => {
+  it('deve alterar a ordem ao clicar em Points', () => {
 
     cy.intercept('GET', '**/search*')
       .as('getTopStories')
@@ -168,7 +145,7 @@ describe('Pagina', () => {
 
     })
   })
-  it('You must delete an item from the list by clicking on Archive', () => {
+  it('deve excluir um item da lista clicando em Arquivar.', () => {
     cy.intercept('GET', '**/search*')
       .as('getTopStories')
 
@@ -180,7 +157,7 @@ describe('Pagina', () => {
       })
     })
   })
-  it('You must find the More button and click it to load more items', () => {
+  it('deve encontrar o botão More e clicar nele para carregar mais itens.', () => {
     cy.intercept('GET', '**/search*')
       .as('getTopStories')
 
@@ -195,7 +172,7 @@ describe('Pagina', () => {
       })
     });
   });
-  it('You must validate multiple items via fixture', () => {
+  it('deve validar vários itens por meio de um dispositivo de validação.', () => {
     cy.validateTopNLinks('.table-row a', 5)
   })
 });

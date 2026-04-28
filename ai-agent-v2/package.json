@@ -1,0 +1,31 @@
+{
+  "name": "ai-agent-v2",
+  "version": "1.0.0",
+   "bin": {
+    "qa-agent": "dist/cli/index.js"
+  },
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "qa": "ts-node src/cli/index.ts",
+    "qa:safe": "ts-node src/cli/index.ts --mode=safe",
+    "qa:full": "ts-node src/cli/index.ts --mode=full",
+    "qa:analyze": "ts-node src/cli/index.ts --mode=analyze",
+    "qa:generate": "ts-node src/cli/index.ts --mode=generate",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "fs-extra": "^11.3.4",
+    "glob": "^13.0.6",
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0"
+  }
+}

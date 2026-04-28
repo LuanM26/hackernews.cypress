@@ -1,8 +1,6 @@
 const { defineConfig } = require('cypress')
-// const grep = require('@cypress/grep/src/plugin')
 
 module.exports = defineConfig({
-
   projectId: "doark9",
 
   video: true,
@@ -19,9 +17,13 @@ module.exports = defineConfig({
   e2e: {
     baseUrl: 'https://hackernews-seven.vercel.app',
 
-    setupNodeEvents(on, config) {
-      // grep(config)
+    specPattern: [
+  'cypress/e2e/tests/**/*.cy.{js,ts}',
+  'cypress/e2e/generated/api/**/*.cy.{js,ts}',
+  'cypress/e2e/generated/e2e/**/*.cy.{js,ts}'
+],
 
+    setupNodeEvents(on, config) {
       config.env = {
         ...config.env,
         MAILOSAUR_API_KEY: process.env.MAILOSAUR_API_KEY,

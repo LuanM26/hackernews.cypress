@@ -1,17 +1,6 @@
-# Node
 node_modules/
-
-# Cypress
+dist/
 cypress/videos/
 cypress/screenshots/
-
-# Agent runtime files
-scripts/ai-agent/runtime-requests.json
-scripts/ai-agent/test-failures.json
-
-# Build / misc
-dist/
-coverage/
-
-# Env
+cypress/downloads/
 .env
