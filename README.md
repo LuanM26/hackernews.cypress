@@ -62,13 +62,10 @@ CYPRESS → executa todos os testes
 
 ---
 ## ⚙️ Execução headless
-
-Os testes são executados em modo headless utilizando Cypress:
-
-```bash
-cypress run
 ![Cypress Results](./docs/images/Modo.png)
----
+
+Os testes são executados em modo headless utilizando Cypress: cypress run
+
 
 ## 📊 QA Report
 
